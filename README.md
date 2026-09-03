@@ -14,7 +14,6 @@ PhD, Politecnico di Milano.
 |---|---|
 | [docs/results.md](docs/results.md) | the questions, the results, how to reproduce them — **start here** |
 | [docs/setup.md](docs/setup.md) | installation: repository access, Git LFS, conda, CUDA, weights |
-| [docs/percorso.md](docs/percorso.md) | working diary (Italian): the decisions taken, and the dead ends |
 
 ## Layout
 

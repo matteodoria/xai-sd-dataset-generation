@@ -5,7 +5,7 @@ A4 margins, sections starting on a new page, and tables and code blocks kept fro
 splitting across pages. Open the result in a browser and use Print -> Save as PDF.
 
 Usage:
-    python docs/render.py docs/percorso.md
+    python docs/render.py <file.md>
 """
 
 import pathlib

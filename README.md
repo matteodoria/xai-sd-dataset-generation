@@ -172,6 +172,8 @@ xAI-Project/
 ├── download_weights.sh        # scarica i pesi DiffusionFt
 ├── generate_dataset.py        # script principale di generazione
 ├── classifier_training.py     # training del classificatore
+├── xai_*.py                   # analisi di explainability
+├── XAI/                       # moduli per l'analisi (vedi README_xAI.md)
 ├── Models/                    # definizioni dei modelli
 ├── Data/
 │   ├── MNIST/                 # dataset MedMNIST (.npz, via LFS)
@@ -181,6 +183,8 @@ xAI-Project/
     └── DiffusionFt/link.txt    # link per scaricare i pesi diffusione
 ```
 
+La parte di explainability — cosa abbiamo chiesto al modello, i risultati e come
+riprodurli — è documentata in [README_xAI.md](README_xAI.md).
 I dataset CIFAR-10/100 vengono scaricati automaticamente da Keras al primo
 uso; non serve prepararli.
 

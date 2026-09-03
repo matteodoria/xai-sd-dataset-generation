@@ -6,6 +6,23 @@
 __pycache__/
 *.pyc
 *.pyo
-
-# Ambienti
 .ipynb_checkpoints/
+
+# IDE
+.idea/
+
+# Pesi del diffusion model fine-tunato: ~3,2 GB l'uno, sei dataset.
+# Si riscaricano con ./download_weights.sh; i link.txt restano tracciati.
+Checkpoints/DDPM/Exp_*/*/DiffusionFt/*.hdf5
+
+# Classificatori ResNet20 (~50 MB l'uno): artefatti derivati, si rigenerano
+# con classifier_training.py. Nota: .h5, non .hdf5, quindi NON coperti da
+# .gitattributes — senza questa riga entrerebbero in git come blob normali.
+Checkpoints/Classifiers/**/*.h5
+
+# Dataset sintetici generati: si rigenerano con generate_dataset.py.
+Data/Synthetic/
+
+# Artefatti dell'analisi xAI (.npz, .png): rigenerabili con gli script xai_*,
+# e .gitattributes manderebbe ogni .npz su LFS.
+XAI_Results/

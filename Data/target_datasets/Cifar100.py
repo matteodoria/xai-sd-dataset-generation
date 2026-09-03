@@ -5,7 +5,7 @@ import tensorflow as tf
 
 class CIFAR100(Dataset):
     def __init__(self):
-        super().__init__("cifar10", 100, 32)
+        super().__init__("cifar100", 100, 32)
 
     def get_labels(self):
         labels = ["apple", "aquarium_fish", "baby", "bear", "beaver", "bed", "bee", "beetle", "bicycle", "bottle",
@@ -62,12 +62,12 @@ class CIFAR100(Dataset):
         y_train = tfk.utils.to_categorical(y_train, 100)
 
         if take == 1:
-            path = "Data/Synthetic/Exp_0001/cifar100/40k"
+            path = f"Data/Synthetic/Exp_{exp}/cifar100/40k"
         else:
             # If we need a synthetic dataset larger than the original
             # we use the 10x larger generated dataset
             # and then take a subset of it
-            path = "Data/Synthetic/Exp_0001/cifar100/400k"
+            path = f"Data/Synthetic/Exp_{exp}/cifar100/400k"
 
         print("Getting data from: ", path)
 

@@ -3,7 +3,7 @@
 What `XAI_Results/` contains, who writes each file and who reads it back.
 
 The directory is git-ignored: `.gitattributes` would send every `.npz` to Git LFS, and
-the whole tree is ~469 MB of quantities that the scripts regenerate. It is delivered
+the whole tree is ~446 MB of quantities that the scripts regenerate. It is delivered
 separately from the repository. Nothing here is a source: every file can be rebuilt
 with the commands in [results.md](results.md#how-to-reproduce).
 
@@ -133,7 +133,7 @@ selected, final figures are tracked in the repository under
 
 ## Sizes
 
-Three files account for 350 of the 469 MB, all of them stored generations:
+Three files account for 350 of the 446 MB, all of them stored generations:
 
 | file | size |
 |---|---|

@@ -282,12 +282,20 @@ def maps_over_batch(images, maps, titles, title="", out_path=None, cols=4):
         plt.close(fig)
     return fig
 
-def image_grid(rows, row_labels, col_labels, title="", out_path=None):
+def image_grid(rows, row_labels, col_labels, title="", out_path=None, max_cols=12):
     """One row per configuration, one column per class.
 
     Meant for comparing generations that differ in a single controlled way, so
     the same column always holds the same class and the same initial noise.
+    Beyond max_cols classes an evenly spaced sample is shown: the comparison is
+    between rows, and a hundred columns only make every panel too small to see.
     """
+    total = len(rows[0])
+    if total > max_cols:
+        keep = np.linspace(0, total - 1, max_cols).round().astype(int)
+        rows = [[images[i] for i in keep] for images in rows]
+        col_labels = [col_labels[i] for i in keep]
+        title = f"{title} — {max_cols} of {total} classes"
     n_rows, n_cols = len(rows), len(rows[0])
     fig, axes = plt.subplots(n_rows, n_cols,
                              figsize=(1.5 * n_cols, 1.7 * n_rows), squeeze=False)

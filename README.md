@@ -57,7 +57,7 @@ Git-ignored, because large and reproducible:
 | `Checkpoints/DDPM/**/DiffusionFt/*.hdf5` (~3.4 GB each) | `./download_weights.sh` — links are in the tracked `link.txt` |
 | `Checkpoints/Classifiers/**/*.h5` (~50 MB each)         | `python -m scripts.classifier_training` |
 | `Data/Synthetic/`                                       | `python -m scripts.generate_dataset` |
-| `XAI_Results/`                                          | the `scripts/xai_*` entry points |
+| `XAI_Results/`                                          | the scripts/xai_* entry points — contents documented in [docs/artefacts.md](docs/artefacts.md) |
 
 The pre-trained class embeddings and the MedMNIST datasets **are** in the
 repository, through Git LFS. Cloning without `git-lfs` installed leaves text

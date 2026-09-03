@@ -326,6 +326,7 @@ has a 250 GB quota, filled once already.
 | `XAI/instrumentation.py` | attention capture, eager sampling loop, chunked generation |
 | `XAI/scoring.py` | the ResNet20 judge and its preprocessing |
 | `XAI/plotting.py` | figures |
+| `XAI_Results/` | generated artefacts, git-ignored — see [artefacts.md](artefacts.md) |
 | `scripts/xai_*.py` | entry points, one per experiment |
 | `tools/` | one-off diagnostics: UNet reconnaissance, GPU and linearity checks |
 | `notebooks/` | Results 1, 2 and 3, on stored artefacts, without a GPU |

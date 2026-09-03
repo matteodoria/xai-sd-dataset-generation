@@ -1,155 +1,152 @@
-# xAI-Project — Generazione di dataset sintetici
+# Setup
 
-Pipeline per generare dataset sintetici tramite Stable Diffusion con embedding
-di classe fine-tunati, per esperimenti di explainability (xAI) su dataset
-naturali (CIFAR-10/100) e biomedici (MedMNIST: blood, derma, path, retina).
-
-Questo repository contiene tutto il necessario per partire: codice, ambiente,
-pesi pre-addestrati e script di setup. Segui i passi **nell'ordine indicato**.
+How to get the project running: repository access, Python environment, CUDA and
+pre-trained weights. Follow the steps **in the order given**. What the project
+does, and how it is organised, is in the [README](../README.md).
 
 ---
 
-## ⚠️ Prima di iniziare — leggi questi due avvisi
+## ⚠️ Before you start — two warnings
 
-1. **NON scaricare il repository come archivio ZIP.** Lo ZIP di GitHub **non**
-   include i file gestiti con Git LFS (pesi ed embedding): otterresti dei
-   segnaposto di testo da poche centinaia di byte al posto dei file veri, e il
-   codice fallirebbe. **Usa esclusivamente `git clone`** come descritto sotto.
+1. **Do not download the repository as a ZIP archive.** GitHub's ZIP does **not**
+   include files managed by Git LFS (weights and embeddings): you would get
+   text placeholders of a few hundred bytes in place of the real files, and the
+   code would fail. **Use `git clone` only**, as described below.
 
-2. **Installa Git LFS PRIMA di clonare.** Se cloni senza Git LFS attivo,
-   ottieni comunque i segnaposto. L'ordine corretto è: installa git-lfs →
-   `git lfs install` → poi `git clone`.
+2. **Install Git LFS BEFORE cloning.** Cloning without Git LFS active gives you
+   the placeholders anyway. The right order is: install git-lfs →
+   `git lfs install` → then `git clone`.
 
 ---
 
-## 0. Prerequisiti
+## 0. Prerequisites
 
-Si assume di lavorare **sul cluster** (stesso ambiente su cui è stato preparato
-il progetto), con a disposizione:
+These instructions assume you are working **on the cluster** (the same
+environment the project was prepared on), with:
 
-- `conda` / `miniforge` installato nella propria home
-- il sistema di `module` (per il toolkit CUDA)
+- `conda` / `miniforge` installed in your home directory
+- the `module` system (for the CUDA toolkit)
 - `git`
 
-Verifica rapida:
+Quick check:
 
 ```bash
 conda --version
 git --version
-module avail 2>&1 | grep -i "cuda/11.8"   # deve comparire cuda/11.8.0
+module avail 2>&1 | grep -i "cuda/11.8"   # cuda/11.8.0 must appear
 ```
 
 ---
 
-## 1. Configura l'accesso SSH a GitHub (repo privato)
+## 1. Set up SSH access to GitHub (the repository is private)
 
-Il repository è **privato**: per clonarlo devi (a) essere stato aggiunto come
-collaboratore (chiedi a Matteo), e (b) avere una chiave SSH collegata al tuo
-account GitHub. Se hai già una chiave SSH funzionante, salta al punto 2.
+The repository is **private**: to clone it you need (a) to have been added as a
+collaborator — ask Matteo — and (b) an SSH key linked to your GitHub account. If
+you already have a working SSH key, skip to step 2.
 
-**Verifica se sei già a posto:**
+**Check whether you are already set:**
 
 ```bash
 ssh -T git@github.com
 ```
 
-Se risponde `Hi <username>!` sei pronto, vai al punto 2. Se dà
-`Permission denied`, configura la chiave:
+If it answers `Hi <username>!` you are ready, go to step 2. If it says
+`Permission denied`, set up the key:
 
 ```bash
-# 1. Genera una chiave (premi Invio ad ogni domanda per i default)
-ssh-keygen -t ed25519 -C "tua.email@example.com"
+# 1. Generate a key (press Enter at every prompt for the defaults)
+ssh-keygen -t ed25519 -C "your.email@example.com"
 
-# 2. Mostra la chiave PUBBLICA e copiala tutta
+# 2. Print the PUBLIC key and copy all of it
 cat ~/.ssh/id_ed25519.pub
 ```
 
-Poi su **github.com** → Settings → SSH and GPG keys → **New SSH key**,
-incolla la chiave pubblica e salva. Infine ri-verifica:
+Then on **github.com** → Settings → SSH and GPG keys → **New SSH key**, paste the
+public key and save. Finally check again:
 
 ```bash
-ssh -T git@github.com    # ora deve rispondere "Hi <username>!"
+ssh -T git@github.com    # must now answer "Hi <username>!"
 ```
 
-> Nota: incolla solo il file `.pub` (chiave **pubblica**). La chiave privata
-> (`id_ed25519`, senza `.pub`) non va mai condivisa.
+> Note: paste only the `.pub` file (the **public** key). The private key
+> (`id_ed25519`, without `.pub`) must never be shared.
 
 ---
 
-## 2. Installa Git LFS e clona il repository
+## 2. Install Git LFS and clone the repository
 
 ```bash
-# Installa git-lfs nell'ambiente conda 'base' (se non presente sul sistema)
+# Install git-lfs in the 'base' conda environment (if not already on the system)
 conda install -n base -c conda-forge git-lfs
 conda activate base
 git lfs install
 
-# Clona il repo (via SSH). Gli embedding (~920 MB) e i dataset MedMNIST
-# (~264 MB) vengono scaricati automaticamente da Git LFS durante il clone.
-cd ~/Desktop      # o dove preferisci tenere il progetto
+# Clone the repository (over SSH). The embeddings (~920 MB) and the MedMNIST
+# datasets (~264 MB) are fetched automatically by Git LFS during the clone.
+cd ~/Desktop      # or wherever you want to keep the project
 git clone git@github.com:matteodoria/xAI-Project.git
 cd xAI-Project
 ```
 
-**Verifica che i pesi siano veri e non segnaposto:**
+**Check that the weights are real files and not placeholders:**
 
 ```bash
 file Checkpoints/DDPM/Exp_xAI/cifar100/MyEmbedding/epoch41.hdf5
-# Deve dire: "Hierarchical Data Format (version 5) data"
-# Se dice "ASCII text", Git LFS non era attivo: reinstallalo e ri-clona.
+# Must say: "Hierarchical Data Format (version 5) data"
+# If it says "ASCII text", Git LFS was not active: reinstall it and clone again.
 ```
 
 ---
 
-## 3. Crea l'ambiente Python
+## 3. Create the Python environment
 
 ```bash
 conda env create -f environment.yml
 conda activate sd_dataset
 ```
 
-Questo crea l'ambiente `sd_dataset` con TensorFlow 2.13, lo stack CUDA 11.8
-(via pip) e tutte le dipendenze, incluse le versioni esatte testate.
+This creates the `sd_dataset` environment with TensorFlow 2.13, the CUDA 11.8
+stack (via pip) and every dependency, pinned to the versions that were tested.
 
 ---
 
-## 4. Configura CUDA (una volta sola)
+## 4. Configure CUDA (once)
 
-Sul cluster, lo stack CUDA installato via pip ha bisogno di due aggiustamenti
-(collegamento alla libreria driver `libcuda.so` e al compilatore `ptxas`).
-Lo script li applica e li rende permanenti per l'ambiente `sd_dataset`.
+On the cluster, the pip-installed CUDA stack needs two adjustments: linking the
+driver library `libcuda.so` and the `ptxas` compiler. The script applies them and
+makes them permanent for the `sd_dataset` environment.
 
 ```bash
-# assicurati che l'ambiente sia attivo
+# make sure the environment is active
 conda activate sd_dataset
 bash setup_cuda.sh
 ```
 
-Al termine deve stampare `Setup CUDA completato con successo`. Le correzioni
-si attiveranno automaticamente ad ogni `conda activate sd_dataset`.
+It must end by printing `Setup CUDA completato con successo`. The fixes are then
+applied automatically on every `conda activate sd_dataset`.
 
 ---
 
-## 5. Scarica i pesi del modello di diffusione (DiffusionFt)
+## 5. Download the diffusion model weights (DiffusionFt)
 
-Gli embedding sono già arrivati col clone (LFS). Mancano solo i pesi del
-modello di diffusione fine-tunato, che sono grandi (~3.4 GB ciascuno) e vanno
-scaricati a parte dai link forniti.
+The embeddings arrived with the clone, through LFS. What is missing are the
+weights of the fine-tuned diffusion model: they are large (~3.4 GB each) and are
+downloaded separately from the links provided.
 
 ```bash
-# Scarica solo i dataset che ti servono (consigliato):
+# Download only the datasets you need (recommended):
 bash download_weights.sh cifar10 bloodmnist
 
-# Oppure tutti e sei (richiede ~20 GB liberi):
+# Or all six (needs ~20 GB free):
 bash download_weights.sh
 ```
 
-> **Spazio disco**: ogni peso pesa ~3.4 GB. Controlla lo spazio con
-> `df -h ~` prima di scaricarne molti.
+> **Disk space**: each weight file is ~3.4 GB. Check with `df -h ~` before
+> downloading several of them.
 
 ---
 
-## 6. Genera un dataset sintetico
+## 6. Generate a synthetic dataset
 
 ```bash
 conda activate sd_dataset
@@ -157,62 +154,45 @@ python -m scripts.generate_dataset --dataset cifar10 --img_total 400 \
     --enc_epoch 25 --dif_epoch 5 --inf_steps 20 --ugs 1.0 --exp xAI
 ```
 
-Dataset disponibili: `cifar10`, `cifar100`, `bloodmnist`, `dermamnist`,
-`pathmnist`, `retinamnist`. Le immagini generate finiscono in
+Available datasets: `cifar10`, `cifar100`, `bloodmnist`, `dermamnist`,
+`pathmnist`, `retinamnist`. The generated images end up in
 `Data/Synthetic/Exp_xAI/<dataset>/`.
 
 ---
 
-## Struttura del repository
+## Where to look next
 
-```
-xAI-Project/
-├── environment.yml            # ambiente conda (sd_dataset)
-├── setup_cuda.sh              # fix CUDA (libcuda.so + ptxas)
-├── download_weights.sh        # scarica i pesi DiffusionFt
-├── generate_dataset.py        # script principale di generazione
-├── classifier_training.py     # training del classificatore
-├── xai_*.py                   # analisi di explainability
-├── XAI/                       # moduli per l'analisi (vedi README_xAI.md)
-├── Models/                    # definizioni dei modelli
-├── Data/
-│   ├── MNIST/                 # dataset MedMNIST (.npz, via LFS)
-│   └── target_datasets/       # loader dei dataset (codice)
-└── Checkpoints/DDPM/Exp_xAI/<dataset>/
-    ├── MyEmbedding/*.hdf5      # embedding pre-addestrati (via LFS)
-    └── DiffusionFt/link.txt    # link per scaricare i pesi diffusione
-```
+CIFAR-10/100 are downloaded automatically by Keras on first use; there is
+nothing to prepare for them.
 
-La parte di explainability — cosa abbiamo chiesto al modello, i risultati e come
-riprodurli — è documentata in [results.md](results.md).
-I dataset CIFAR-10/100 vengono scaricati automaticamente da Keras al primo
-uso; non serve prepararli.
+The repository layout is described in the [README](../README.md); the
+explainability work — the questions asked of the model, the results, and how to
+reproduce them — is in [results.md](results.md).
 
 ---
 
 ## Troubleshooting
 
-**`file signature not found` / `ASCII text` al posto di un `.hdf5` o `.npz`**
-Git LFS non era attivo al momento del clone: il file è un segnaposto di testo.
-Installa git-lfs (`git lfs install`), poi `git lfs pull` per scaricare i file
-veri, oppure ri-clona da capo con LFS attivo.
+**`file signature not found` / `ASCII text` where a `.hdf5` or `.npz` should be**
+Git LFS was not active when you cloned: the file is a text placeholder. Install
+git-lfs (`git lfs install`), then `git lfs pull` to fetch the real files, or
+clone again from scratch with LFS active.
 
 **`Could not load library libcudnn_...: libcuda.so: cannot open shared object file`**
-Manca la configurazione CUDA. Assicurati di aver eseguito `bash setup_cuda.sh`
-con l'ambiente `sd_dataset` attivo, e di aver riattivato l'ambiente dopo
-(`conda deactivate && conda activate sd_dataset`).
+The CUDA configuration is missing. Make sure you ran `bash setup_cuda.sh` with
+the `sd_dataset` environment active, and that you re-activated the environment
+afterwards (`conda deactivate && conda activate sd_dataset`).
 
 **`Couldn't invoke ptxas` / `Relying on driver to perform ptx compilation`**
-`ptxas` non è nel PATH. Anche questo lo risolve `setup_cuda.sh`. Se persiste,
-verifica che il modulo `cuda/11.8.0` sia disponibile (`module avail | grep cuda`).
+`ptxas` is not on the PATH. `setup_cuda.sh` fixes this too. If it persists, check
+that the `cuda/11.8.0` module is available (`module avail | grep cuda`).
 
 **`ran out of memory trying to allocate ...GiB`**
-La GPU è al limite di memoria. Non è un errore fatale: la generazione prosegue
-con un algoritmo più parco. Se invece crasha davvero, prova a ridurre il
-batch/numero di immagini, o imposta `TF_FORCE_GPU_ALLOW_GROWTH=true` prima del
-comando.
+The GPU is at its memory limit. This is not fatal: generation carries on with a
+more frugal algorithm. If it really crashes, reduce the batch or the number of
+images, or set `TF_FORCE_GPU_ALLOW_GROWTH=true` before the command.
 
-**Il download di un DiffusionFt scarica un file piccolo / non valido**
-Il link SharePoint potrebbe essere scaduto. Verifica i link nei file
-`Checkpoints/DDPM/Exp_xAI/<dataset>/DiffusionFt/link.txt` e chiedi a Matteo
-link aggiornati se necessario.
+**A DiffusionFt download produces a small or invalid file**
+The SharePoint link may have expired. Check the links in
+`Checkpoints/DDPM/Exp_xAI/<dataset>/DiffusionFt/link.txt` and ask Matteo for
+updated ones if needed.

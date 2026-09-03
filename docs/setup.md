@@ -153,7 +153,7 @@ bash download_weights.sh
 
 ```bash
 conda activate sd_dataset
-python generate_dataset.py --dataset cifar10 --img_total 400 \
+python -m scripts.generate_dataset --dataset cifar10 --img_total 400 \
     --enc_epoch 25 --dif_epoch 5 --inf_steps 20 --ugs 1.0 --exp xAI
 ```
 
@@ -184,7 +184,7 @@ xAI-Project/
 ```
 
 La parte di explainability — cosa abbiamo chiesto al modello, i risultati e come
-riprodurli — è documentata in [README_xAI.md](README_xAI.md).
+riprodurli — è documentata in [results.md](results.md).
 I dataset CIFAR-10/100 vengono scaricati automaticamente da Keras al primo
 uso; non serve prepararli.
 

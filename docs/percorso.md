@@ -1,7 +1,7 @@
 # Il percorso — come siamo arrivati ai risultati
 
 Documento di lavoro, in italiano, scritto per ricordare **le decisioni** e non solo le
-conclusioni. Il *cosa* abbiamo trovato sta in [README_xAI.md](../README_xAI.md); qui
+conclusioni. Il *cosa* abbiamo trovato sta in [results.md](results.md); qui
 c'è il *come*, inclusi i vicoli ciechi — che sono la parte che insegna qualcosa.
 
 ---
@@ -57,7 +57,7 @@ La seconda, più interessante: confrontando entrambi con un riferimento in `floa
 la **forma chiusa risultava cento volte più accurata del modello** (`3.9e-6` contro
 `4.1e-4`). Il motivo l'ha rivelato un messaggio nei log — `TensorFloat-32 will be used
 for the matrix multiplication` — TensorFlow su GPU recenti tronca la mantissa a 10 bit.
-Il gate è finito dentro `xai_conditioning.py` ed è rieseguito a ogni run.
+Il gate è finito dentro `scripts/xai_conditioning.py` ed è rieseguito a ogni run.
 
 Con la forma chiusa validata, la geometria: **dal 87% al 99% dell'energia del
 conditioning è comune a tutte le classi**. L'informazione discriminante vive nel poco
@@ -215,7 +215,7 @@ stati i più informativi.
 
 **DermaMNIST**: accuratezza `all` = 14.3%, che è esattamente 1/7 — il giudice assegna
 tutto a una classe sola. Prima di dire "il generatore non funziona" bisognava escludere
-che fosse colpa del *nostro* codice: rigenerando con `generate_dataset.py`, lo script
+che fosse colpa del *nostro* codice: rigenerando con `scripts/generate_dataset.py`, lo script
 originale del paper, sono usciti gli stessi artefatti fluorescenti.
 
 E lanciando l'analisi della Fase 1 su DermaMNIST è comparso il numero che ha chiuso il

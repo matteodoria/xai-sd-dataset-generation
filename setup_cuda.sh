@@ -2,7 +2,7 @@
 #
 # setup_cuda.sh
 # -----------------------------------------------------------------------------
-# Configura l'ambiente CUDA per far girare generate_dataset.py sul cluster.
+# Configura l'ambiente CUDA per far girare scripts/generate_dataset.py sul cluster.
 #
 # Risolve tre problemi noti su questo cluster (RHEL 9 + vGPU + stack CUDA pip):
 #
@@ -43,7 +43,7 @@ warn()  { echo "[WARN]  $*" >&2; }
 fail()  { echo "[FAIL]  $*" >&2; exit 1; }
 
 echo "==============================================="
-echo "  Setup ambiente CUDA per generate_dataset.py"
+echo "  Setup ambiente CUDA per scripts/generate_dataset.py"
 echo "==============================================="
 
 # --- 0. Verifica che l'env conda giusto sia attivo ---------------------------

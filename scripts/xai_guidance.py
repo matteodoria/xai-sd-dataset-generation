@@ -6,7 +6,7 @@ multiplies by UGS. Measuring it needs no attention weights and carries none of
 their caveats.
 
 Usage:
-    python xai_guidance.py --dataset cifar10 --exp xAI --enc_epoch 31 --dif_epoch 10
+    python -m scripts.xai_guidance --dataset cifar10 --exp xAI --enc_epoch 31 --dif_epoch 10
 """
 
 import argparse

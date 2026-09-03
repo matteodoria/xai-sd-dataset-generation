@@ -3,7 +3,7 @@
 Reads the .npz written by xai_conditioning.py: no GPU and no model involved.
 
 Usage:
-    python xai_figures.py --dataset cifar10 --exp xAI --enc_epoch 31
+    python -m scripts.xai_figures --dataset cifar10 --exp xAI --enc_epoch 31
 """
 
 import argparse

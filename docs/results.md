@@ -1,11 +1,11 @@
 # xAI — Explaining the generator
 
 Explainability analysis of the class-conditional generator described in
-[README.md](README.md). The paper shows **that** the adaptation works and **that**
+[setup.md](setup.md). The paper shows **that** the adaptation works and **that**
 UGS and the adaptation epoch dominate the fANOVA. This work answers **why**, across
 all six datasets.
 
-For environment, weights and CUDA setup see the [main README](README.md): this
+For environment, weights and CUDA setup see the [main README](setup.md): this
 document assumes `sd_dataset` is active and the `DiffusionFt` weights are in place.
 
 ---
@@ -60,7 +60,7 @@ is the descriptor rather than the model: histology images are textures, and a
 per-class mean image describes them poorly. Reported as a limitation, not as a
 refutation.
 
-![Cosine between class residuals on CIFAR-100](docs/figures/cifar100_cosine.png)
+![Cosine between class residuals on CIFAR-100](figures/cifar100_cosine.png)
 
 *CIFAR-100: cosine between class residuals, classes ordered by official superclass.
 Twenty red blocks sit on the diagonal, one per superclass. But there is also a second
@@ -68,7 +68,7 @@ level nobody supplied: indoor objects cluster together, and so do mammals and
 reptiles — a nested taxonomy that CIFAR-100 does not even define, emerging from a
 hundred orthogonal one-hot vectors.*
 
-![Conditioning against visual similarity on BloodMNIST](docs/figures/bloodmnist_mantel.png)
+![Conditioning against visual similarity on BloodMNIST](figures/bloodmnist_mantel.png)
 
 *BloodMNIST: conditioning similarity against visual similarity of the real images,
 one point per class pair. Red points are pairs within the same haematological group —
@@ -140,7 +140,7 @@ datasets where generation works:
 > this will be* — composition, background, dominant colours; the middle ones decide
 > *what it is an image of*; the last ones refine without adding class.
 
-![Accuracy and pixel recovery against conditioned steps](docs/figures/cifar10_curves.png)
+![Accuracy and pixel recovery against conditioned steps](figures/cifar10_curves.png)
 
 *CIFAR-10. Pixel recovery (blue) is concave — steep, then flattening. Accuracy (red)
 is S-shaped: almost flat at first, steepest in the middle. At five conditioned steps a
@@ -148,7 +148,7 @@ quarter of the pixel distance is already covered while accuracy is barely above
 chance. The red curve ends above the dashed line, i.e. above the judge's accuracy on
 real images.*
 
-![Conditioning restricted to a window of steps](docs/figures/cifar10_windows.png)
+![Conditioning restricted to a window of steps](figures/cifar10_windows.png)
 
 *Same class, same initial noise, only the number of conditioned steps changes. The
 `0-4` row is nearly indistinguishable from `none` — the dog is still a blue vehicle,
@@ -195,7 +195,7 @@ Above 3.5 generation works, below 1.3 it fails, and no dataset falls in between.
 number is computed from the encoder weights alone, in seconds, **without generating a
 single image** — a diagnostic rather than a post-hoc explanation.
 
-![Effective rank against generation quality](docs/figures/rank_vs_quality.png)
+![Effective rank against generation quality](figures/rank_vs_quality.png)
 
 *Points are coloured by the outcome, never by the rank: colouring by the predictor
 would assume what the figure is meant to show. The shaded band is the observed gap —
@@ -217,7 +217,7 @@ training the encoder never learned to tell the classes apart (`df↔mel` +0.979,
 defect of this code. `all` = 14.3% is exactly 1/7, the judge assigning everything to
 one class.
 
-![DermaMNIST generations](docs/figures/dermamnist_failure.png)
+![DermaMNIST generations](figures/dermamnist_failure.png)
 
 *DermaMNIST, conditioning restricted to a window of steps. The images are not skin
 lesions but fluorescent artefacts, and the `all` row is indistinguishable from
@@ -275,27 +275,27 @@ configuration.
 **Results 1 and 4** need no GPU and take seconds:
 
 ```bash
-python xai_conditioning.py --dataset cifar10 --exp xAI --enc_epoch 31
-python xai_figures.py      --dataset cifar10 --exp xAI --enc_epoch 31
+python -m scripts.xai_conditioning --dataset cifar10 --exp xAI --enc_epoch 31
+python -m scripts.xai_figures      --dataset cifar10 --exp xAI --enc_epoch 31
 ```
 
 **Result 2**, the attention machinery:
 
 ```bash
-python xai_inspect_unet.py
-python xai_test_capture.py
-python xai_test_stability.py
+python -m tools.xai_inspect_unet
+python -m scripts.xai_test_capture
+python -m scripts.xai_test_stability
 ```
 
 **Result 3**, the intervention (about an hour per dataset):
 
 ```bash
-python xai_guidance.py --dataset cifar10 --exp xAI --enc_epoch 31 --dif_epoch 10 \
+python -m scripts.xai_guidance --dataset cifar10 --exp xAI --enc_epoch 31 --dif_epoch 10 \
     --steps 31 --ugs 1.752
-python xai_windows.py  --dataset cifar10 --exp xAI --enc_epoch 31 --dif_epoch 10 \
+python -m scripts.xai_windows  --dataset cifar10 --exp xAI --enc_epoch 31 --dif_epoch 10 \
     --steps 31 --ugs 1.752 --window 5 --per_class 50 --chunk 100
-python xai_score.py    --dataset cifar10 --exp xAI --npz steps31_window5.npz
-python xai_sanity.py   --dataset cifar10 --exp xAI --enc_epoch 31 --dif_epoch 10
+python -m scripts.xai_score    --dataset cifar10 --exp xAI --npz steps31_window5.npz
+python -m scripts.xai_sanity   --dataset cifar10 --exp xAI --enc_epoch 31 --dif_epoch 10
 ```
 
 Artefacts go to `XAI_Results/Exp_<exp>/<dataset>/`, git-ignored because
@@ -315,28 +315,30 @@ has a 250 GB quota, filled once already.
 | `XAI/instrumentation.py` | attention capture, eager sampling loop, chunked generation |
 | `XAI/scoring.py` | the ResNet20 judge and its preprocessing |
 | `XAI/plotting.py` | figures |
-| `xai_*.py` | entry points, one per experiment |
-| `notebooks/03_temporal.ipynb` | Result 3, runs on stored artefacts without a GPU |
+| `scripts/xai_*.py` | entry points, one per experiment |
+| `tools/` | one-off diagnostics: UNet reconnaissance, GPU and linearity checks |
+| `notebooks/` | Results 1 and 3, on stored artefacts, without a GPU |
 
-Logic lives in the modules and the scripts only orchestrate: the same computations
-must run both from the CLI on the cluster and inside the notebooks, and duplicating
-them would mean watching them drift apart.
+Paths in this table are relative to the repository root. Entry points import the
+project's packages and read `Checkpoints/` and `Data/` by relative path, so they
+are run as modules from the root — `python -m scripts.xai_windows …` — and not as
+`python scripts/xai_windows.py`, which would fail on the imports.
 
 ---
 
 ## Four traps, and how they were handled
 
 **The `ClassEncoder` swallows loading errors.**
-[`class_encoder.py:19-22`](Models/class_encoder.py) catches the exception, prints a
+[`class_encoder.py:19-22`](../Models/class_encoder.py) catches the exception, prints a
 warning and **carries on with random weights**. A wrong path produces not a crash but
 a full analysis of pure noise, looking perfectly plausible. Every script checks the
-checkpoint exists before loading it. In `xai_sanity.py` the same behaviour is
+checkpoint exists before loading it. In `scripts/xai_sanity.py` the same behaviour is
 exploited deliberately, and the log says so.
 
 **TensorFlow uses TF32 on recent GPUs.**
 `float32` matmuls run with a 10-bit mantissa: the model sits `4.1e-4` from a `float64`
 reference, our closed form `3.9e-6`. The formula is therefore *more accurate than the
-model*, and is used as the reference. Every run of `xai_conditioning.py` re-checks
+model*, and is used as the reference. Every run of `scripts/xai_conditioning.py` re-checks
 this before computing anything.
 
 **Attention weights cannot be captured in graph mode.**
@@ -348,7 +350,7 @@ tensors would be symbolic placeholders from the tracing pass. Hence
 **The judge's preprocessing.**
 The ResNet20 was trained with `Rescaling(1./255)` on images loaded at native
 resolution with bilinear interpolation. Any other normalisation yields low accuracies
-that *look* like a finding and are a bug — which is why `xai_score.py` always first
+that *look* like a finding and are a bug — which is why `scripts/xai_score.py` always first
 verifies accuracy on the real test set.
 
 ---

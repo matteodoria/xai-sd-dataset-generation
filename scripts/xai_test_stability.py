@@ -129,6 +129,26 @@ def main():
         out_path=out)
     print(f"\nSaved: {out}")
 
+    ## 4. Store the evidence, so notebook 02 can read it without a GPU.
+    saved = {
+        "timestep": int(step["timestep"]),
+        "images": images,
+        "labels": np.array(common.get_labels(DATASET)[:BATCH]),
+        "across": across,
+        "detail_cond": detail_cond,
+        "detail_uncond": detail_uncond,
+        "lumin_cond": lumin_cond,
+        "lumin_uncond": lumin_uncond,
+        "best_index": best_index,
+        "best_maps": maps,
+    }
+    for field in ("layer", "head", "side", "slot", "slot_cv", "conditioning_cv"):
+        saved[field] = np.array([r[field] for r in rows])
+
+    out = os.path.join(common.results_dir(EXP, DATASET, "attention"), "stability.npz")
+    np.savez(out, **saved)
+    print(f"Saved: {out}")
+
 
 if __name__ == "__main__":
     main()

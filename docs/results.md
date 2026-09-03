@@ -82,12 +82,19 @@ disagree.*
 The UNet's cross-attention maps do **not** provide a spatial localisation of class
 conditioning. Three independent measurements:
 
-- aggregated maps are nearly uniform (max/mean between 1.04 and 1.16 at every
-  resolution);
-- per-head selectivity does exist (CV up to 1.28), but at the first step it tracks
-  the initial noise and at the last one the image detail;
-- that tracking is **identical with and without conditioning** (−0.428 against
-  −0.382), so it carries no class information.
+- the aggregated maps are nearly uniform (max/mean between 1.05 and 1.17 at every
+  resolution and at both ends of denoising) while the distance itself sits around
+  0.25–0.30 everywhere: the class changes how the context is read by a quarter of the
+  whole distribution, uniformly, with no spatial structure;
+- per-head selectivity does exist — CV up to 1.28 — but that peak is at the *first*
+  step, when the latent still holds pure noise and there is nothing to localise. At
+  the last step the sharpest head reaches 0.54, its map is speckle at the scale of a
+  single grid cell, and it correlates **negatively** with local detail (−0.428): it
+  attends to the flat background, not to the subject;
+- across all 128 (layer, head) pairs the profile of detail-following is nearly the
+  same with and without conditioning — r = 0.85 for detail, r = 0.82 for luminance —
+  so what these heads track is a property of the UNet's cross-attention, not a trace
+  of the class.
 
 **The reason is structural.** In text-driven Stable Diffusion there is a `cat` token
 that binds to a region, which is what makes DAAM possible. Here the `ClassEncoder`
@@ -96,7 +103,8 @@ Conditioning is a global vector, and a global vector has nothing to localise. It
 the direct consequence of the geometry measured in Result 1.
 
 A by-product worth noting: **ten slots out of a hundred receive 93–96% of the
-attention**, and they are the same throughout denoising.
+attention** — the single most attended one takes about a quarter on its own — and they
+are largely the same ten throughout denoising.
 
 ### 3. Class identity is built midway through denoising (main result)
 
@@ -287,6 +295,9 @@ python -m scripts.xai_test_capture
 python -m scripts.xai_test_stability
 ```
 
+The last two write `XAI_Results/Exp_<exp>/<dataset>/attention/uniformity.npz` and
+`stability.npz`, which `notebooks/02_attention.ipynb` reads back without a GPU.
+
 **Result 3**, the intervention (about an hour per dataset):
 
 ```bash
@@ -317,7 +328,7 @@ has a 250 GB quota, filled once already.
 | `XAI/plotting.py` | figures |
 | `scripts/xai_*.py` | entry points, one per experiment |
 | `tools/` | one-off diagnostics: UNet reconnaissance, GPU and linearity checks |
-| `notebooks/` | Results 1 and 3, on stored artefacts, without a GPU |
+| `notebooks/` | Results 1, 2 and 3, on stored artefacts, without a GPU |
 
 Paths in this table are relative to the repository root. Entry points import the
 project's packages and read `Checkpoints/` and `Data/` by relative path, so they

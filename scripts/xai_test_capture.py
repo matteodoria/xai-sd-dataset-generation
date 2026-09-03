@@ -51,7 +51,9 @@ print(f"first step: timestep {first['timestep']}, "
 
 from XAI import attention
 
-for name, step in (("first (noisiest)", steps[0]), ("last (cleanest)", steps[-1])):
+saved = {}
+for tag, name, step in (("first", "first (noisiest)", steps[0]),
+                        ("last",  "last (cleanest)",  steps[-1])):
     print(f"\n--- {name} step, timestep {step['timestep']} ---")
 
     weights = attention.token_weights(step["conditional"])
@@ -81,6 +83,16 @@ for name, step in (("first (noisiest)", steps[0]), ("last (cleanest)", steps[-1]
           f"at {best['side']}x{best['side']}, slot {best['slot']}, "
           f"CV {best['slot_cv']:.3f}")
 
+    # Stored so notebook 02 can recompute these numbers without a GPU.
+    saved[f"{tag}_timestep"] = int(step["timestep"])
+    saved[f"{tag}_token_weights"] = weights
+    saved[f"{tag}_conditioning_cv"] = cond_cv
+    saved[f"{tag}_slot_cv"] = slot_cv
+    for field in ("layer", "head", "side", "slot"):
+        saved[f"{tag}_{field}"] = np.array([r[field] for r in rows])
+    for side, grid in maps.items():
+        saved[f"{tag}_condmap_{side}"] = grid
+
 from XAI import common, plotting
 
 step = steps[0]
@@ -96,3 +108,7 @@ plotting.attention_overlay(
     title=f"{DATASET} 'cat', timestep {step['timestep']}: most selective heads",
     out_path=out)
 print(f"\nSaved: {out}")
+
+out = os.path.join(common.results_dir(EXP, DATASET, "attention"), "uniformity.npz")
+np.savez(out, **saved)
+print(f"Saved: {out}")

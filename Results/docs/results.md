@@ -97,6 +97,8 @@ conditioning. Three independent measurements:
   so what these heads track is a property of the UNet's cross-attention, not a trace
   of the class.
 
+![Cross-attention on CIFAR-10: flat aggregated map, speckled sharpest head, detail-following unchanged by the class](figures/cifar10_attention.png)
+
 **The reason is structural.** In text-driven Stable Diffusion there is a `cat` token
 that binds to a region, which is what makes DAAM (Tang et al., 2023) possible. 
 Here the `ClassEncoder` emits a hundred slots in one block from a one-hot vector — 
@@ -301,6 +303,7 @@ python -m scripts.generator_part.conditioning.run_figures      --dataset cifar10
 
 ```bash
 python -m scripts.tools.inspect_unet
+python -m scripts.tools.fig_attention
 python -m scripts.generator_part.conditioning.run_attention_capture
 python -m scripts.generator_part.conditioning.run_attention_stability
 ```

@@ -26,7 +26,7 @@ document assumes `sd_dataset` is active and the `DiffusionFt` weights are in pla
 The `ClassEncoder` is two `Dense` layers with no activation, hence an **affine map**:
 `context(x) = xE + u`, with `E = W1W2` and `u = b1W2`. Class embeddings can be read
 straight from the weights, without generating anything, and the unconditional context
-used by classifier-free guidance is exactly `u` — so the direction guidance amplifies
+used by classifier-free guidance (Ho & Salimans, 2022) is exactly `u` — so the direction guidance amplifies
 is `E[c]`, the c-th row.
 
 | dataset | energy shared by all classes | Mantel vs real visual similarity | p |
@@ -40,7 +40,8 @@ is `E[c]`, the c-th row.
 
 Between 87% and 99% of the conditioning is **identical for every class**; the
 discriminative information lives in what remains. Within that residual, class
-similarity matches the similarity of the real images on four datasets out of six —
+similarity matches the similarity of the real images on four datasets out of six 
+by a Mantel test (Mantel, 1967) —
 starting from mutually orthogonal one-hot vectors, having never seen words or
 categories.
 
@@ -97,10 +98,14 @@ conditioning. Three independent measurements:
   of the class.
 
 **The reason is structural.** In text-driven Stable Diffusion there is a `cat` token
-that binds to a region, which is what makes DAAM possible. Here the `ClassEncoder`
-emits a hundred slots in one block from a one-hot vector — there is no "ears" slot.
-Conditioning is a global vector, and a global vector has nothing to localise. It is
-the direct consequence of the geometry measured in Result 1.
+that binds to a region, which is what makes DAAM (Tang et al., 2023) possible. 
+Here the `ClassEncoder` emits a hundred slots in one block from a one-hot vector — 
+there is no "ears" slot. Conditioning is a global vector, and a global vector has nothing 
+to localise. It is the direct consequence of the geometry measured in Result 1. The same
+question is contested in NLP, where attention weights have been argued both to
+disagree with other importance measures and to remain a legitimate explanation
+(Jain & Wallace, 2019; Wiegreffe & Pinter, 2019). Here it does not need arbitrating:
+there is no localisation to find.
 
 A by-product worth noting: **ten slots out of a hundred receive 93–96% of the
 attention** — the single most attended one takes about a quarter on its own — and they
@@ -186,7 +191,7 @@ The permuted run is the sharp one: giving every class the next class's embedding
 not break generation, it **redirects** it, with undiminished effectiveness. And
 accuracy on the requested label falls *below* chance, since with that shift the
 requested class is never produced on purpose. A pipeline artefact would survive
-randomisation; it would not survive this.
+randomisation test (Adebayo et al., 2018); it would not survive this.
 
 ### 4. The effective rank tells in advance whether it will work
 
@@ -199,6 +204,11 @@ randomisation; it would not survive this.
 | retinamnist | **1.29** | 29.2% | 20.0% | +9.2 |
 | dermamnist | **1.26** | 14.3% | 14.3% | 0.0 |
 
+The effective rank is the exponential of the Shannon entropy of the residual
+spectrum — a continuous count of how many directions carry the conditioning.
+Roy & Vetterli (2007) define it on the normalised singular values; the values above
+are computed on the explained-variance ratios, which weight the leading directions
+more heavily and are therefore lower.
 Above 3.5 generation works, below 1.3 it fails, and no dataset falls in between. The
 number is computed from the encoder weights alone, in seconds, **without generating a
 single image** — a diagnostic rather than a post-hoc explanation.
@@ -367,22 +377,6 @@ verifies accuracy on the real test set.
 
 ---
 
-## Technical details worth reporting
-
-- **The number of steps executed is not the number requested.**
-  `tf.range(1, 1000, 1000 // num_steps)` yields 32 values for 31, 45 for 44, 50 for
-  48. This applies to the paper's optimal values too, since they go through the same
-  function.
-- **PathMNIST has domain shift.** Its 98.9% `Best Score` is *validation* accuracy;
-  on the test set — collected at a different clinical centre — the judge scores 88.5%.
-  The real ceiling is 88.5%.
-- **The gate's bias criterion was revised.** Comparing the bias to the noise standard
-  deviation is meaningless when the noise is itself a few `float32` ULPs (RetinaMNIST,
-  context scale 1.74). The threshold is now anchored to the arithmetic
-  (`|bias|/scale < 5ε`) rather than to the observed value; on the other five datasets
-  the original criterion still holds on its own.
-
----
 
 ## Declared limitations
 
@@ -397,5 +391,28 @@ verifies accuracy on the real test set.
   only 26 points separate ceiling from chance, and the experiment lacks resolution.
 - Result 4 rests on **six datasets with two failures**. The separation is clean but
   the sample is small.
-- The code instantiates the **Stable Diffusion 1.x** UNet (768-dim context, 8 heads,
-  16 attention blocks) while the paper states SD 2.0. To be clarified.
+
+---
+
+## References
+
+- Adebayo, J., Gilmer, J., Muelly, M., Goodfellow, I., Hardt, M., & Kim, B. (2018).
+  Sanity Checks for Saliency Maps. *NeurIPS 2018*. arXiv:1810.03292 — the
+  model-randomisation test that the untrained-encoder run implements.
+- Ho, J., & Salimans, T. (2022). Classifier-Free Diffusion Guidance. arXiv:2207.12598
+  — the guidance rule whose unconditional context is exactly `u`.
+- Jain, S., & Wallace, B. C. (2019). Attention is not Explanation. *NAACL-HLT 2019*.
+  arXiv:1902.10186 — with Wiegreffe & Pinter below, the debate Result 2 instantiates.
+- Kim, B., Wattenberg, M., Gilmer, J., Cai, C., Wexler, J., Viégas, F., & Sayres, R.
+  (2018). Interpretability Beyond Feature Attribution: Quantitative Testing with
+  Concept Activation Vectors (TCAV). *ICML 2018*. arXiv:1711.11279 — concept
+  directions in a representation space, the closest published analogue to `E[c]`.
+- Mantel, N. (1967). The Detection of Disease Clustering and a Generalized Regression
+  Approach. *Cancer Research*, 27(2), 209-220 — the test used in Result 1.
+- Roy, O., & Vetterli, M. (2007). The Effective Rank: a Measure of Effective
+  Dimensionality. *EUSIPCO 2007*, 606-610 — Result 4 uses the variance-spectrum
+  variant described below.
+- Tang, R., et al. (2023). What the DAAM: Interpreting Stable Diffusion Using Cross
+  Attention. *ACL 2023*. arXiv:2210.04885 — the method Result 2 set out to transfer.
+- Wiegreffe, S., & Pinter, Y. (2019). Attention is not not Explanation.
+  *EMNLP-IJCNLP 2019*. arXiv:1908.04626.

@@ -76,8 +76,8 @@ def main():
 
     ## 2. Load the new Stable Diffusion Model (with Custom Embedding_model)
     print("... LOADING STABLE DIFFUSION MODEL ...")
-    emb_weights_path = f"Checkpoints/DDPM/Exp_{args.exp}/{dataset_name}/MyEmbedding/epoch{enc_epoch}.hdf5"
-    dif_weights_path = f"Checkpoints/DDPM/Exp_{args.exp}/{dataset_name}/DiffusionFt/epoch{dif_epoch}.hdf5"
+    emb_weights_path = f"Models/Checkpoints/DDPM/Exp_{args.exp}/{dataset_name}/MyEmbedding/epoch{enc_epoch}.hdf5"
+    dif_weights_path = f"Models/Checkpoints/DDPM/Exp_{args.exp}/{dataset_name}/DiffusionFt/epoch{dif_epoch}.hdf5"
 
     ddpm = MyStableDiffusion(res=res, num_classes=len(labels),
                              original_diffusion=True, original_text_encoder=False,

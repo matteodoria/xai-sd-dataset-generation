@@ -52,8 +52,8 @@ def main():
     ddpm = MyStableDiffusion(
         res=RES, num_classes=NUM_CLASSES,
         original_diffusion=True, original_text_encoder=False,
-        enc_weight_path=f"Checkpoints/DDPM/Exp_{EXP}/{DATASET}/MyEmbedding/epoch{ENC_EPOCH}.hdf5",
-        diff_weight_path=f"Checkpoints/DDPM/Exp_{EXP}/{DATASET}/DiffusionFt/epoch{DIF_EPOCH}.hdf5")
+        enc_weight_path=f"Models/Checkpoints/DDPM/Exp_{EXP}/{DATASET}/MyEmbedding/epoch{ENC_EPOCH}.hdf5",
+        diff_weight_path=f"Models/Checkpoints/DDPM/Exp_{EXP}/{DATASET}/DiffusionFt/epoch{DIF_EPOCH}.hdf5")
 
     labels = tf.eye(NUM_CLASSES)[:BATCH]
     context = ddpm.text_encoder(labels)

@@ -21,7 +21,7 @@ from scripts.generator_part.conditioning.lib import plotting, common
 
 from Models.ImageClassifiers import resnet
 
-CLASSIFIER = "Checkpoints/Classifiers/resnet20/{dataset}/real/best_model.h5"
+CLASSIFIER = "Models/Checkpoints/Classifiers/resnet20/{dataset}/real/best_model.h5"
 
 
 def parse_args():

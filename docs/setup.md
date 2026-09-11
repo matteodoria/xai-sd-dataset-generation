@@ -91,7 +91,7 @@ cd xAI-Project
 **Check that the weights are real files and not placeholders:**
 
 ```bash
-file Checkpoints/DDPM/Exp_xAI/cifar100/MyEmbedding/epoch41.hdf5
+file Models/Checkpoints/DDPM/Exp_xAI/cifar100/MyEmbedding/epoch41.hdf5
 # Must say: "Hierarchical Data Format (version 5) data"
 # If it says "ASCII text", Git LFS was not active: reinstall it and clone again.
 ```
@@ -194,5 +194,5 @@ images, or set `TF_FORCE_GPU_ALLOW_GROWTH=true` before the command.
 
 **A DiffusionFt download produces a small or invalid file**
 The SharePoint link may have expired. Check the links in
-`Checkpoints/DDPM/Exp_xAI/<dataset>/DiffusionFt/link.txt` and ask Matteo for
+`Models/Checkpoints/DDPM/Exp_xAI/<dataset>/DiffusionFt/link.txt` and ask Matteo for
 updated ones if needed.

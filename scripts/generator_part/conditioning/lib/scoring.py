@@ -4,7 +4,7 @@ import tensorflow as tf
 
 from Models.ImageClassifiers import resnet
 
-JUDGE = "Checkpoints/Classifiers/resnet20/{dataset}/real/best_model.h5"
+JUDGE = "Models/Checkpoints/Classifiers/resnet20/{dataset}/real/best_model.h5"
 
 
 def load_judge(dataset, resolution, num_classes):

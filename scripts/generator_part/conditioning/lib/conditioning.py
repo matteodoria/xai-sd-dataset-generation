@@ -30,7 +30,7 @@ from Models.class_encoder import ClassEncoder
 SEQ_LEN, EMB_DIM = 100, 768
 
 def checkpoint_path(dataset, exp, epoch):
-    return f"Checkpoints/DDPM/Exp_{exp}/{dataset}/MyEmbedding/epoch{epoch}.hdf5"
+    return f"Models/Checkpoints/DDPM/Exp_{exp}/{dataset}/MyEmbedding/epoch{epoch}.hdf5"
 
 def build_encoder(dataset, exp, epoch, num_classes):
     """Load a ClassEncoder, failing loudly when the checkpoint is missing.

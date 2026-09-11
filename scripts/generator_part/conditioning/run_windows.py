@@ -70,8 +70,8 @@ def main():
     ddpm = MyStableDiffusion(
         res=resolution, num_classes=num_classes,
         original_diffusion=True, original_text_encoder=False,
-        enc_weight_path=f"Checkpoints/DDPM/Exp_{args.exp}/{args.dataset}/MyEmbedding/epoch{args.enc_epoch}.hdf5",
-        diff_weight_path=f"Checkpoints/DDPM/Exp_{args.exp}/{args.dataset}/DiffusionFt/epoch{args.dif_epoch}.hdf5")
+        enc_weight_path=f"Models/Checkpoints/DDPM/Exp_{args.exp}/{args.dataset}/MyEmbedding/epoch{args.enc_epoch}.hdf5",
+        diff_weight_path=f"Models/Checkpoints/DDPM/Exp_{args.exp}/{args.dataset}/DiffusionFt/epoch{args.dif_epoch}.hdf5")
 
     # Tiled, not repeated: the order becomes c0..c9, c0..c9, ... so every chunk
     # holds all classes in equal parts.

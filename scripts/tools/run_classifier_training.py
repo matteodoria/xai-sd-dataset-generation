@@ -339,7 +339,7 @@ def main(args):
     else:
         take = 1
 
-    classifier_checkpoint_path = f'Checkpoints/Classifiers/Exp_{experiment}/{classifier_name}/'
+    classifier_checkpoint_path = f'Models/Checkpoints/Classifiers/Exp_{experiment}/{classifier_name}/'
     os.makedirs(classifier_checkpoint_path, exist_ok=True)
 
     ## 1. Load results dictionary and specific classifier-dataset-experiment key
@@ -393,7 +393,7 @@ def main(args):
     classifier.compile(loss=loss, optimizer='adam',
                        metrics=['accuracy', tf.keras.metrics.TopKCategoricalAccuracy(k=5)])
 
-    classifier_weight_path = f"Checkpoints/Classifiers/{classifier_name}/{dataset_name}/"
+    classifier_weight_path = f"Models/Checkpoints/Classifiers/{classifier_name}/{dataset_name}/"
     classifier_weight_path += f"x{take}/" if args.synthetic else "real/"
 
     os.makedirs(classifier_weight_path, exist_ok=True)

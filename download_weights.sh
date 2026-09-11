@@ -4,7 +4,7 @@
 # -----------------------------------------------------------------------------
 # Scarica i pesi del modello di diffusione fine-tunato (DiffusionFt) per i
 # dataset richiesti, a partire dai link OneDrive/SharePoint contenuti nei
-# file Checkpoints/DDPM/Exp_xAI/<dataset>/DiffusionFt/link.txt
+# file Models/Checkpoints/DDPM/Exp_xAI/<dataset>/DiffusionFt/link.txt
 #
 # NOTA: gli embedding (MyEmbedding) e i dataset MedMNIST (Data/MNIST) NON
 #       vanno scaricati con questo script: arrivano automaticamente col
@@ -24,7 +24,7 @@ set -uo pipefail
 # --- Config ------------------------------------------------------------------
 # Radice dei checkpoint, relativa alla posizione dello script (root del repo)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-EXP_DIR="$SCRIPT_DIR/Checkpoints/DDPM/Exp_xAI"
+EXP_DIR="$SCRIPT_DIR/Models/Checkpoints/DDPM/Exp_xAI"
 
 ALL_DATASETS=(cifar10 cifar100 dermamnist retinamnist bloodmnist pathmnist)
 

@@ -14,8 +14,8 @@ NUM_CLASSES, RES = 10, 32
 ddpm = MyStableDiffusion(
     res=RES, num_classes=NUM_CLASSES,
     original_diffusion=True, original_text_encoder=False,
-    enc_weight_path=f"Checkpoints/DDPM/Exp_{EXP}/{DATASET}/MyEmbedding/epoch{ENC_EPOCH}.hdf5",
-    diff_weight_path=f"Checkpoints/DDPM/Exp_{EXP}/{DATASET}/DiffusionFt/epoch{DIF_EPOCH}.hdf5")
+    enc_weight_path=f"Models/Checkpoints/DDPM/Exp_{EXP}/{DATASET}/MyEmbedding/epoch{ENC_EPOCH}.hdf5",
+    diff_weight_path=f"Models/Checkpoints/DDPM/Exp_{EXP}/{DATASET}/DiffusionFt/epoch{DIF_EPOCH}.hdf5")
 
 import numpy as np
 

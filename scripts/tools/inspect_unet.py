@@ -17,8 +17,8 @@ DATASET, EXP, ENC_EPOCH, DIF_EPOCH = 'cifar10', 'xAI', 31, 10
 NUM_CLASSES = 10
 RES = 32
 
-enc_path = f"Checkpoints/DDPM/Exp_{EXP}/{DATASET}/MyEmbedding/epoch{ENC_EPOCH}.hdf5"
-dif_path = f"Checkpoints/DDPM/Exp_{EXP}/{DATASET}/DiffusionFt/epoch{DIF_EPOCH}.hdf5"
+enc_path = f"Models/Checkpoints/DDPM/Exp_{EXP}/{DATASET}/MyEmbedding/epoch{ENC_EPOCH}.hdf5"
+dif_path = f"Models/Checkpoints/DDPM/Exp_{EXP}/{DATASET}/DiffusionFt/epoch{DIF_EPOCH}.hdf5"
 
 for path in [enc_path, dif_path]:
     assert os.path.isfile(path), f"File {path} does not exist"

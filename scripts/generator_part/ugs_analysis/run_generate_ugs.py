@@ -57,12 +57,12 @@ print("Number of classes:", num_classes)
 # ---------------------------------------------------------
 
 enc_weights_path = (
-    f"Checkpoints/DDPM/Exp_{EXP}/{DATASET}/"
+    f"Models/Checkpoints/DDPM/Exp_{EXP}/{DATASET}/"
     f"MyEmbedding/epoch{ENC_EPOCH}.hdf5"
 )
 
 dif_weights_path = (
-    f"Checkpoints/DDPM/Exp_{EXP}/{DATASET}/"
+    f"Models/Checkpoints/DDPM/Exp_{EXP}/{DATASET}/"
     f"DiffusionFt/epoch{DIF_EPOCH}.hdf5"
 )
 

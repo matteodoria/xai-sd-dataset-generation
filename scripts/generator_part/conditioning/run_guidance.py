@@ -42,8 +42,8 @@ def main():
     ddpm = MyStableDiffusion(
         res=resolution, num_classes=num_classes,
         original_diffusion=True, original_text_encoder=False,
-        enc_weight_path=f"Checkpoints/DDPM/Exp_{args.exp}/{args.dataset}/MyEmbedding/epoch{args.enc_epoch}.hdf5",
-        diff_weight_path=f"Checkpoints/DDPM/Exp_{args.exp}/{args.dataset}/DiffusionFt/epoch{args.dif_epoch}.hdf5")
+        enc_weight_path=f"Models/Checkpoints/DDPM/Exp_{args.exp}/{args.dataset}/MyEmbedding/epoch{args.enc_epoch}.hdf5",
+        diff_weight_path=f"Models/Checkpoints/DDPM/Exp_{args.exp}/{args.dataset}/DiffusionFt/epoch{args.dif_epoch}.hdf5")
 
     one_hot = tf.eye(num_classes)
     context = ddpm.text_encoder(one_hot)

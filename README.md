@@ -25,7 +25,7 @@ PhD, Politecnico di Milano.
 ├── docs/           documentation and final figures
 ├── Models/         model definitions            (from the paper's repository)
 ├── Data/           dataset loaders and data     (from the paper's repository)
-├── Checkpoints/    model weights                (from the paper's repository)
+├── Models/Checkpoints/    model weights                (from the paper's repository)
 └── XAI_Results/    generated artefacts, git-ignored
 ```
 
@@ -35,7 +35,7 @@ are, so the diff against it stays readable; everything added here is lowercase.
 
 ## Running
 
-Entry points import the project's packages and reach `Checkpoints/` and `Data/`
+Entry points import the project's packages and reach `Models/Checkpoints/` and `Data/`
 by relative path, so they run **as modules, from the repository root**:
 
 ```bash
@@ -53,8 +53,8 @@ Git-ignored, because large and reproducible:
 
 |                                                         | how to get it back |
 |---------------------------------------------------------|---|
-| `Checkpoints/DDPM/**/DiffusionFt/*.hdf5` (~3.4 GB each) | `./download_weights.sh` — links are in the tracked `link.txt` |
-| `Checkpoints/Classifiers/**/*.h5` (~50 MB each)         | `python -m scripts.classifier_training` |
+| `Models/Checkpoints/DDPM/**/DiffusionFt/*.hdf5` (~3.4 GB each) | `./download_weights.sh` — links are in the tracked `link.txt` |
+| `Models/Checkpoints/Classifiers/**/*.h5` (~50 MB each)         | `python -m scripts.classifier_training` |
 | `Data/Synthetic/`                                       | `python -m scripts.generate_dataset` |
 | `XAI_Results/`                                          | the scripts/xai_* entry points — contents documented in [docs/artefacts.md](docs/artefacts.md) |
 

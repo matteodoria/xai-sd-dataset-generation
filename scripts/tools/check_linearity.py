@@ -6,7 +6,7 @@ import tensorflow.keras as tfk
 from Models.class_encoder import ClassEncoder
 
 DATASET, EXP, EPOCH, NUM_CLASSES = "cifar10", "xAI", 31, 10
-path = f"Checkpoints/DDPM/Exp_{EXP}/{DATASET}/MyEmbedding/epoch{EPOCH}.hdf5"
+path = f"Models/Checkpoints/DDPM/Exp_{EXP}/{DATASET}/MyEmbedding/epoch{EPOCH}.hdf5"
 assert os.path.isfile(path), f"Checkpoint non trovato: {path}"
 
 enc = ClassEncoder(max_length=NUM_CLASSES, weight_path=path)

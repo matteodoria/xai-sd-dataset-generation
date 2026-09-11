@@ -321,7 +321,7 @@ python -m scripts.xai_sanity   --dataset cifar10 --exp xAI --enc_epoch 31 --dif_
 
 Artefacts go to `XAI_Results/Exp_<exp>/<dataset>/`, git-ignored because
 `.gitattributes` would send every `.npz` to Git LFS. Result 3 needs the classifier in
-`Checkpoints/Classifiers/resnet20/<dataset>/real/`. Mind the disk: the cluster home
+`Models/Checkpoints/Classifiers/resnet20/<dataset>/real/`. Mind the disk: the cluster home
 has a 250 GB quota, filled once already.
 
 ---
@@ -342,7 +342,7 @@ has a 250 GB quota, filled once already.
 | `notebooks/` | Results 1, 2 and 3, on stored artefacts, without a GPU |
 
 Paths in this table are relative to the repository root. Entry points import the
-project's packages and read `Checkpoints/` and `Data/` by relative path, so they
+project's packages and read `Models/Checkpoints/` and `Data/` by relative path, so they
 are run as modules from the root — `python -m scripts.xai_windows …` — and not as
 `python scripts/xai_windows.py`, which would fail on the imports.
 

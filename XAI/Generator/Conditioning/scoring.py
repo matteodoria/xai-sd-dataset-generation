@@ -1,6 +1,5 @@
 """Judging generated images with a classifier trained on real data only."""
 
-import numpy as np
 import tensorflow as tf
 
 from Models.ImageClassifiers import resnet

@@ -14,7 +14,8 @@ os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "2")
 import argparse
 import numpy as np
 
-from XAI import common, conditioning
+from XAI.Generator.Conditioning import conditioning, common
+
 
 def parse_args():
     parser = argparse.ArgumentParser()

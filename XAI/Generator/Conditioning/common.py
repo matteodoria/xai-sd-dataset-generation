@@ -7,7 +7,6 @@ from Data.target_datasets import Cifar10, Cifar100, MedMnist
 
 RESULTS_ROOT = "XAI_Results"
 
-
 def get_dataset(dataset):
     """Instantiate the loader for a target dataset."""
     match dataset:

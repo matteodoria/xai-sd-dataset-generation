@@ -20,7 +20,7 @@ import numpy as np
 import tensorflow as tf
 
 from Models.stable_diffusion import MyStableDiffusion
-from XAI import attention, common, instrumentation, plotting
+from XAI.Generator.Conditioning import attention, plotting, instrumentation, common
 
 DATASET, EXP, ENC_EPOCH, DIF_EPOCH = "cifar10", "xAI", 31, 10
 NUM_CLASSES, RES, SEED, STEPS, UGS, BATCH = 10, 32, 1234, 20, 1.0, 8

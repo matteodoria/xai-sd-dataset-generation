@@ -19,7 +19,6 @@ and it is used as the reference
 """
 
 import os
-from sys import flags
 
 import numpy as np
 import tensorflow.keras as tfk
@@ -176,7 +175,6 @@ def decompose(E):
 
 def group_cosines(cos_matrix, group_ids):
     """Mean cosine within and between groups, diagonal excluded"""
-    groups_ids = np.asarray(group_ids)
     same = group_ids[:, None] == group_ids[None, :]
     off = ~np.eye(len(cos_matrix), dtype = bool)
     return {

@@ -24,8 +24,7 @@ import numpy as np
 import tensorflow as tf
 
 from Models.stable_diffusion import MyStableDiffusion
-from XAI import common, instrumentation, plotting
-from XAI import scoring
+from XAI.Generator.Conditioning import plotting, instrumentation, scoring, common
 
 
 def parse_args():

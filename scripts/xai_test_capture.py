@@ -7,7 +7,6 @@ os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "2")
 import tensorflow as tf
 
 from Models.stable_diffusion import MyStableDiffusion
-from XAI import instrumentation
 
 DATASET, EXP, ENC_EPOCH, DIF_EPOCH = "cifar10", "xAI", 31, 10
 NUM_CLASSES, RES = 10, 32
@@ -19,8 +18,6 @@ ddpm = MyStableDiffusion(
     diff_weight_path=f"Checkpoints/DDPM/Exp_{EXP}/{DATASET}/DiffusionFt/epoch{DIF_EPOCH}.hdf5")
 
 import numpy as np
-
-from XAI import instrumentation
 
 SEED, STEPS, UGS = 1234, 20, 1.0
 
@@ -49,7 +46,7 @@ print(f"first step: timestep {first['timestep']}, "
       f"{len(first['conditional'])} conditional + "
       f"{len(first['unconditional'])} unconditional tensors")
 
-from XAI import attention
+from XAI.Generator.Conditioning import attention, plotting, common
 
 saved = {}
 for tag, name, step in (("first", "first (noisiest)", steps[0]),
@@ -92,8 +89,6 @@ for tag, name, step in (("first", "first (noisiest)", steps[0]),
         saved[f"{tag}_{field}"] = np.array([r[field] for r in rows])
     for side, grid in maps.items():
         saved[f"{tag}_condmap_{side}"] = grid
-
-from XAI import common, plotting
 
 step = steps[0]
 rows = attention.head_selectivity(step["conditional"], step["unconditional"])

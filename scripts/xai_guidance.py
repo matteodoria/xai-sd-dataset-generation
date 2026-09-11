@@ -18,7 +18,7 @@ import numpy as np
 import tensorflow as tf
 
 from Models.stable_diffusion import MyStableDiffusion
-from XAI import common, instrumentation
+from XAI.Generator.Conditioning import instrumentation, common
 
 
 def parse_args():

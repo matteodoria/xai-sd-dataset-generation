@@ -28,7 +28,7 @@ import tensorflow as tf
 
 from Models.class_encoder import ClassEncoder
 from Models.stable_diffusion import MyStableDiffusion
-from XAI import common, instrumentation, scoring
+from XAI.Generator.Conditioning import instrumentation, scoring, common
 
 
 def parse_args():

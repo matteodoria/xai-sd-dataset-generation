@@ -42,8 +42,8 @@ does not become more negative on six.
 
 ## `conditioning/epoch<N>.npz`
 
-Written by `python -m scripts.xai_conditioning`. Read by
-`notebooks/01_conditioning.ipynb`, `scripts/xai_figures` and `scripts/xai_summary`.
+Written by `python -m scripts.generator_part.conditioning.run_conditioning`. Read by
+`notebooks/01_generator_conditioning.ipynb`, `scripts/generator_part/conditioning/run_figures` and `scripts/generator_part/conditioning/run_summary`.
 The geometry of the class-conditioning space, computed from the `ClassEncoder` weights
 alone — no GPU, no generation. `E` is flattened: 100 context slots × 768 dimensions.
 
@@ -58,7 +58,7 @@ alone — no GPU, no generation. `E` is flattened: 100 context slots × 768 dime
 
 ## `guidance/steps<S>_ugs<U>.npz`
 
-Written by `python -m scripts.xai_guidance`. Read by `notebooks/03_temporal.ipynb`.
+Written by `python -m scripts.generator_part.conditioning.run_guidance`. Read by `notebooks/03_generator_temporal.ipynb`.
 The class signal `eps(c) − eps(0)` along denoising, one row per step, one column per
 class. Note there is one more step than `--steps` asks for: 31 gives 32.
 
@@ -73,7 +73,7 @@ class. Note there is one more step than `--steps` asks for: 31 gives 32.
 
 ## `windows/steps<S>_window<W>.npz`
 
-Written by `python -m scripts.xai_windows`. The intervention behind Result 3: the same
+Written by `python -m scripts.generator_part.conditioning.run_windows`. The intervention behind Result 3: the same
 classes from the same initial noise, conditioned only inside a window of steps.
 
 | key | shape | what it holds |
@@ -89,8 +89,8 @@ extremes that define the unit of `recovery`, not windows in their own right.
 
 ## `windows/accuracy_steps<S>_window<W>.npz`
 
-Written by `python -m scripts.xai_score`, which judges the images above with a ResNet20
-trained on real data only. Read by `notebooks/03_temporal.ipynb`.
+Written by `python -m scripts.generator_part.conditioning.run_score`, which judges the images above with a ResNet20
+trained on real data only. Read by `notebooks/03_generator_temporal.ipynb`.
 
 | key | shape | what it holds |
 |---|---|---|
@@ -110,8 +110,8 @@ trained on real data only. Read by `notebooks/03_temporal.ipynb`.
 
 ## `attention/uniformity.npz` and `attention/stability.npz`
 
-Written by `python -m scripts.xai_test_capture` and `xai_test_stability`. Read by
-`notebooks/02_attention.ipynb`. The evidence for the negative result.
+Written by `python -m scripts.generator_part.conditioning.run_attention_capture` and `run_attention_stability`. Read by
+`notebooks/02_generator_attention.ipynb`. The evidence for the negative result.
 
 `uniformity.npz` holds, prefixed `first_` and `last_` for the two ends of denoising:
 `timestep`; `token_weights` (layers × 100 slots); `condmap_16`, `condmap_8`, `condmap_4`,

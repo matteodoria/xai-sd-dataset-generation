@@ -231,7 +231,7 @@ would separate them.
 28-41 for the others — selected because it maximised CAS, but with that little
 training the encoder never learned to tell the classes apart (`df↔mel` +0.979,
 `akiec↔mel` +0.910). The generated images are fluorescent artefacts, and
-`generate_dataset.py`, the paper's own script, produces the same ones: it is not a
+`run_generate_dataset.py`, the paper's own script, produces the same ones: it is not a
 defect of this code. `all` = 14.3% is exactly 1/7, the judge assigning everything to
 one class.
 
@@ -293,30 +293,30 @@ configuration.
 **Results 1 and 4** need no GPU and take seconds:
 
 ```bash
-python -m scripts.xai_conditioning --dataset cifar10 --exp xAI --enc_epoch 31
-python -m scripts.xai_figures      --dataset cifar10 --exp xAI --enc_epoch 31
+python -m scripts.generator_part.conditioning.run_conditioning --dataset cifar10 --exp xAI --enc_epoch 31
+python -m scripts.generator_part.conditioning.run_figures      --dataset cifar10 --exp xAI --enc_epoch 31
 ```
 
 **Result 2**, the attention machinery:
 
 ```bash
-python -m tools.xai_inspect_unet
-python -m scripts.xai_test_capture
-python -m scripts.xai_test_stability
+python -m scripts.tools.inspect_unet
+python -m scripts.generator_part.conditioning.run_attention_capture
+python -m scripts.generator_part.conditioning.run_attention_stability
 ```
 
 The last two write `Results/Exp_<exp>/<dataset>/attention/uniformity.npz` and
-`stability.npz`, which `notebooks/02_attention.ipynb` reads back without a GPU.
+`stability.npz`, which `notebooks/02_generator_attention.ipynb` reads back without a GPU.
 
 **Result 3**, the intervention (about an hour per dataset):
 
 ```bash
-python -m scripts.xai_guidance --dataset cifar10 --exp xAI --enc_epoch 31 --dif_epoch 10 \
+python -m scripts.generator_part.conditioning.run_guidance --dataset cifar10 --exp xAI --enc_epoch 31 --dif_epoch 10 \
     --steps 31 --ugs 1.752
-python -m scripts.xai_windows  --dataset cifar10 --exp xAI --enc_epoch 31 --dif_epoch 10 \
+python -m scripts.generator_part.conditioning.run_windows  --dataset cifar10 --exp xAI --enc_epoch 31 --dif_epoch 10 \
     --steps 31 --ugs 1.752 --window 5 --per_class 50 --chunk 100
-python -m scripts.xai_score    --dataset cifar10 --exp xAI --npz steps31_window5.npz
-python -m scripts.xai_sanity   --dataset cifar10 --exp xAI --enc_epoch 31 --dif_epoch 10
+python -m scripts.generator_part.conditioning.run_score    --dataset cifar10 --exp xAI --npz steps31_window5.npz
+python -m scripts.generator_part.conditioning.run_sanity   --dataset cifar10 --exp xAI --enc_epoch 31 --dif_epoch 10
 ```
 
 Artefacts go to `Results/Exp_<exp>/<dataset>/`, git-ignored because
@@ -328,23 +328,33 @@ has a 250 GB quota, filled once already.
 
 ## Code layout
 
+The conditioning analysis lives in `scripts/generator_part/conditioning/`: the
+logic in `lib/`, one entry point per experiment beside it.
+
 | file | role |
 |---|---|
-| `XAI/common.py` | datasets, semantic groups, artefact paths |
-| `XAI/conditioning.py` | closed form, geometry, permutation and Mantel tests |
-| `XAI/attention.py` | map aggregation, per-head selectivity |
-| `XAI/instrumentation.py` | attention capture, eager sampling loop, chunked generation |
-| `XAI/scoring.py` | the ResNet20 judge and its preprocessing |
-| `XAI/plotting.py` | figures |
-| `Results/` | generated artefacts, git-ignored — see [artefacts.md](artefacts.md) |
-| `scripts/xai_*.py` | entry points, one per experiment |
-| `tools/` | one-off diagnostics: UNet reconnaissance, GPU and linearity checks |
-| `notebooks/` | Results 1, 2 and 3, on stored artefacts, without a GPU |
+| `lib/common.py` | datasets, semantic groups, artefact paths |
+| `lib/conditioning.py` | closed form, geometry, permutation and Mantel tests |
+| `lib/attention.py` | map aggregation, per-head selectivity |
+| `lib/instrumentation.py` | attention capture, eager sampling loop, chunked generation |
+| `lib/scoring.py` | the ResNet20 judge and its preprocessing |
+| `lib/plotting.py` | figures |
+| `run_*.py` | entry points, one per experiment |
 
-Paths in this table are relative to the repository root. Entry points import the
-project's packages and read `Models/Checkpoints/` and `Data/` by relative path, so they
-are run as modules from the root — `python -m scripts.xai_windows …` — and not as
-`python scripts/xai_windows.py`, which would fail on the imports.
+| elsewhere | role |
+|---|---|
+| `scripts/generator_part/ugs_analysis/` | the guidance-scale sweep behind notebook 04 |
+| `scripts/tools/` | shared entry points and one-off diagnostics |
+| `notebooks/` | Results 1, 2 and 3, on stored artefacts, without a GPU |
+| `Results/Exp_<exp>/` | generated artefacts, git-ignored — see [artefacts.md](artefacts.md) |
+
+Paths in the first table are relative to
+`scripts/generator_part/conditioning/`, those in the second to the repository
+root. Entry points import the project's packages and read `Models/Checkpoints/`
+and `Data/` by relative path, so they are run as modules from the root —
+`python -m scripts.generator_part.conditioning.run_windows …` — and not as
+`python scripts/generator_part/conditioning/run_windows.py`, which would fail on
+the imports.
 
 ---
 
@@ -354,13 +364,13 @@ are run as modules from the root — `python -m scripts.xai_windows …` — and
 [`class_encoder.py:19-22`](../Models/class_encoder.py) catches the exception, prints a
 warning and **carries on with random weights**. A wrong path produces not a crash but
 a full analysis of pure noise, looking perfectly plausible. Every script checks the
-checkpoint exists before loading it. In `scripts/xai_sanity.py` the same behaviour is
+checkpoint exists before loading it. In `scripts/generator_part/conditioning/run_sanity.py` the same behaviour is
 exploited deliberately, and the log says so.
 
 **TensorFlow uses TF32 on recent GPUs.**
 `float32` matmuls run with a 10-bit mantissa: the model sits `4.1e-4` from a `float64`
 reference, our closed form `3.9e-6`. The formula is therefore *more accurate than the
-model*, and is used as the reference. Every run of `scripts/xai_conditioning.py` re-checks
+model*, and is used as the reference. Every run of `scripts/generator_part/conditioning/run_conditioning.py` re-checks
 this before computing anything.
 
 **Attention weights cannot be captured in graph mode.**
@@ -372,7 +382,7 @@ tensors would be symbolic placeholders from the tracing pass. Hence
 **The judge's preprocessing.**
 The ResNet20 was trained with `Rescaling(1./255)` on images loaded at native
 resolution with bilinear interpolation. Any other normalisation yields low accuracies
-that *look* like a finding and are a bug — which is why `scripts/xai_score.py` always first
+that *look* like a finding and are a bug — which is why `scripts/generator_part/conditioning/run_score.py` always first
 verifies accuracy on the real test set.
 
 ---

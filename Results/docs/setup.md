@@ -150,7 +150,7 @@ bash download_weights.sh
 
 ```bash
 conda activate sd_dataset
-python -m scripts.generate_dataset --dataset cifar10 --img_total 400 \
+python -m scripts.tools.run_generate_dataset --dataset cifar10 --img_total 400 \
     --enc_epoch 25 --dif_epoch 5 --inf_steps 20 --ugs 1.0 --exp xAI
 ```
 

@@ -144,3 +144,15 @@ Three files account for 350 of the 446 MB, all of them stored generations:
 If the archive has to be made smaller, the `images` array inside the `windows` files is
 where the weight is; every derived quantity survives without it, but the generations
 cannot then be re-scored or re-inspected.
+
+## `CAS/test_accuracies.json`
+
+Written and re-read by `python -m scripts.tools.run_classifier_training`, which
+merges into it rather than overwriting: one file per experiment, accumulated
+across runs.
+
+It is the one artefact outside the `<dataset>/<kind>/` scheme above — it is
+cross-dataset by construction, nested as
+`<classifier>/<dataset>/<"real" or "x<N>">/{top_1_accuracy, top_5_accuracy}`.
+The classifier weights it scores live under
+`Models/Checkpoints/Classifiers/<classifier>/<dataset>/<"real" or "x<N>">/`.

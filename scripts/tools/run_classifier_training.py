@@ -339,8 +339,9 @@ def main(args):
     else:
         take = 1
 
-    classifier_checkpoint_path = f'Models/Checkpoints/Classifiers/Exp_{experiment}/{classifier_name}/'
-    os.makedirs(classifier_checkpoint_path, exist_ok=True)
+    # Cross-dataset test accuracies (CAS): a generated artefact, hence under Results/.
+    cas_path = f"Results/Exp_{experiment}/CAS/test_accuracies.json"
+    os.makedirs(os.path.dirname(cas_path), exist_ok=True)
 
     ## 1. Load results dictionary and specific classifier-dataset-experiment key
     print(f"\n------------ CLASSIFICATION ------------"
@@ -351,11 +352,11 @@ def main(args):
           )
 
     try:
-        with open(f"CAS Results/test_accuracies_exp{experiment}.json", 'r') as f:
+        with open(cas_path, 'r') as f:
             results = json.load(f)
     except (FileNotFoundError, json.JSONDecodeError):
         results = {}
-        with open(f"CAS Results/test_accuracies_exp{experiment}.json", 'w') as f:
+        with open(cas_path, 'w') as f:
             json.dump(results, f)
 
     print("\n... LOADING DATASET ...")
@@ -430,7 +431,7 @@ def main(args):
             res_class_ds["top_1_accuracy"] = test_accuracy['accuracy']
             res_class_ds["top_5_accuracy"] = test_accuracy['top_k_categorical_accuracy']
 
-            with open(f"CAS Results/test_accuracies_exp{experiment}.json", "w") as jsonFile:
+            with open(cas_path, "w") as jsonFile:
                 json.dump(results, jsonFile, indent=4)
 
             print("DONE")

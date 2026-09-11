@@ -5,7 +5,7 @@ import numpy as np
 
 from Data.target_datasets import Cifar10, Cifar100, MedMnist
 
-RESULTS_ROOT = "XAI_Results"
+RESULTS_ROOT = "Results"
 
 def get_dataset(dataset):
     """Instantiate the loader for a target dataset."""
@@ -42,7 +42,7 @@ def class_means(dataset):
 
 
 def results_dir(exp, dataset, kind):
-    """Create and return XAI_Results/Exp_<exp>/<dataset>/<kind>/."""
+    """Create and return Results/Exp_<exp>/<dataset>/<kind>/."""
     path = os.path.join(RESULTS_ROOT, f"Exp_{exp}", dataset, kind)
     os.makedirs(path, exist_ok=True)
     return path

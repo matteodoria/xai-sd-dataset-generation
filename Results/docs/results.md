@@ -305,7 +305,7 @@ python -m scripts.xai_test_capture
 python -m scripts.xai_test_stability
 ```
 
-The last two write `XAI_Results/Exp_<exp>/<dataset>/attention/uniformity.npz` and
+The last two write `Results/Exp_<exp>/<dataset>/attention/uniformity.npz` and
 `stability.npz`, which `notebooks/02_attention.ipynb` reads back without a GPU.
 
 **Result 3**, the intervention (about an hour per dataset):
@@ -319,7 +319,7 @@ python -m scripts.xai_score    --dataset cifar10 --exp xAI --npz steps31_window5
 python -m scripts.xai_sanity   --dataset cifar10 --exp xAI --enc_epoch 31 --dif_epoch 10
 ```
 
-Artefacts go to `XAI_Results/Exp_<exp>/<dataset>/`, git-ignored because
+Artefacts go to `Results/Exp_<exp>/<dataset>/`, git-ignored because
 `.gitattributes` would send every `.npz` to Git LFS. Result 3 needs the classifier in
 `Models/Checkpoints/Classifiers/resnet20/<dataset>/real/`. Mind the disk: the cluster home
 has a 250 GB quota, filled once already.
@@ -336,7 +336,7 @@ has a 250 GB quota, filled once already.
 | `XAI/instrumentation.py` | attention capture, eager sampling loop, chunked generation |
 | `XAI/scoring.py` | the ResNet20 judge and its preprocessing |
 | `XAI/plotting.py` | figures |
-| `XAI_Results/` | generated artefacts, git-ignored — see [artefacts.md](artefacts.md) |
+| `Results/` | generated artefacts, git-ignored — see [artefacts.md](artefacts.md) |
 | `scripts/xai_*.py` | entry points, one per experiment |
 | `tools/` | one-off diagnostics: UNet reconnaissance, GPU and linearity checks |
 | `notebooks/` | Results 1, 2 and 3, on stored artefacts, without a GPU |

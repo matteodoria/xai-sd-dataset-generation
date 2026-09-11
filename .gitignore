@@ -25,8 +25,9 @@ Data/Synthetic/
 
 # Artefatti dell'analisi xAI (.npz, .png): rigenerabili con gli script xai_*,
 # e .gitattributes manderebbe ogni .npz su LFS.
-XAI_Results/
+Results/*
+!Results/docs/
 
 # Diario di lavoro personale, e il suo HTML: restano in locale.
-docs/percorso.md
-docs/percorso.html
+Results/docs/percorso.md
+Results/docs/percorso.html

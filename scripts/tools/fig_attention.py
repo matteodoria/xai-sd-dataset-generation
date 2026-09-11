@@ -13,8 +13,8 @@ from matplotlib.colors import TwoSlopeNorm
 from matplotlib.gridspec import GridSpec
 
 DATASET, EXP, IMG = "cifar10", "xAI", 5      # IMG: which of the 8 stability images
-BASE = f"XAI_Results/Exp_{EXP}/{DATASET}/attention"
-OUT = f"docs/figures/{DATASET}_attention.png"
+BASE = f"Results/Exp_{EXP}/{DATASET}/attention"
+OUT = f"Results/docs/figures/{DATASET}_attention.png"
 
 plt.rcParams.update({"font.size": 11, "axes.titlesize": 12})
 

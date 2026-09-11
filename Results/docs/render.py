@@ -5,7 +5,7 @@ A4 margins, sections starting on a new page, and tables and code blocks kept fro
 splitting across pages. Open the result in a browser and use Print -> Save as PDF.
 
 Usage:
-    python docs/render.py <file.md>
+    python Results/docs/render.py <file.md>
 """
 
 import pathlib
@@ -119,7 +119,7 @@ TEMPLATE = """<!DOCTYPE html>
 
 
 def main():
-    source = pathlib.Path(sys.argv[1] if len(sys.argv) > 1 else "docs/percorso.md")
+    source = pathlib.Path(sys.argv[1] if len(sys.argv) > 1 else "Results/docs/percorso.md")
 
     body = markdown.markdown(
         source.read_text(encoding="utf-8"),

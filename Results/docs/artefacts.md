@@ -1,6 +1,6 @@
 # Artefacts
 
-What `XAI_Results/` contains, who writes each file and who reads it back.
+What `Results/` contains, who writes each file and who reads it back.
 
 The directory is git-ignored: `.gitattributes` would send every `.npz` to Git LFS, and
 the whole tree is ~446 MB of quantities that the scripts regenerate. It is delivered
@@ -10,7 +10,7 @@ with the commands in [results.md](results.md#how-to-reproduce).
 ## Layout
 
 ```
-XAI_Results/Exp_<exp>/<dataset>/<kind>/<name>.npz
+Results/Exp_<exp>/<dataset>/<kind>/<name>.npz
 ```
 
 `<name>` encodes the hyper-parameters of the run — `epoch31`, `steps31_window5`,
@@ -129,7 +129,7 @@ maps of the most selective head over the eight images.
 
 PNGs written by the scripts as they run — working output, regenerated on every run. The
 selected, final figures are tracked in the repository under
-[`docs/figures/`](figures/); those are the ones the documents refer to.
+[`Results/docs/figures/`](figures/); those are the ones the documents refer to.
 
 ## Sizes
 

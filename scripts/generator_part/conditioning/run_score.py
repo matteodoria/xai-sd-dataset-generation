@@ -29,7 +29,7 @@ def parse_args():
     parser.add_argument("--dataset", default="cifar10", type=str)
     parser.add_argument("--exp", required=True, type=str)
     parser.add_argument("--npz", required=True, type=str,
-                        help="File under XAI_Results/Exp_<exp>/<dataset>/windows/")
+                        help="File under Results/Exp_<exp>/<dataset>/windows/")
     return parser.parse_args()
 
 

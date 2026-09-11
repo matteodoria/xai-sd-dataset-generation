@@ -46,7 +46,7 @@ print(f"first step: timestep {first['timestep']}, "
       f"{len(first['conditional'])} conditional + "
       f"{len(first['unconditional'])} unconditional tensors")
 
-from XAI.Generator.Conditioning import attention, plotting, common
+from scripts.generator_part.conditioning.lib import attention, plotting, common
 
 saved = {}
 for tag, name, step in (("first", "first (noisiest)", steps[0]),

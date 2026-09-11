@@ -11,7 +11,7 @@ import os
 
 import numpy as np
 
-from XAI.Generator.Conditioning import plotting, common
+from scripts.generator_part.conditioning.lib import plotting, common
 
 
 def parse_args():

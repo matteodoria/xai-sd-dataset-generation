@@ -1,4 +1,4 @@
-# tools/peek_attention.py
+# script/tools/peek_attention.py
 import numpy as np
 
 for name in ("uniformity", "stability"):

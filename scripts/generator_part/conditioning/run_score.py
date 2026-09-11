@@ -17,7 +17,7 @@ os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "2")
 import numpy as np
 import tensorflow as tf
 
-from XAI.Generator.Conditioning import plotting, common
+from scripts.generator_part.conditioning.lib import plotting, common
 
 from Models.ImageClassifiers import resnet
 

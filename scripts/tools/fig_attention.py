@@ -1,4 +1,4 @@
-# tools/fig_attention.py
+# script/tools/fig_attention.py
 """One-off figure for the slides: cross-attention does not localise.
 
 Reads the stored artefacts (no GPU, no generation) and draws three panels,

@@ -364,7 +364,7 @@ the imports.
 ## Four traps, and how they were handled
 
 **The `ClassEncoder` swallows loading errors.**
-[`class_encoder.py:19-22`](../Models/class_encoder.py) catches the exception, prints a
+[`class_encoder.py:19-22`](../../Models/class_encoder.py) catches the exception, prints a
 warning and **carries on with random weights**. A wrong path produces not a crash but
 a full analysis of pure noise, looking perfectly plausible. Every script checks the
 checkpoint exists before loading it. In `scripts/generator_part/conditioning/run_sanity.py` the same behaviour is

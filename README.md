@@ -19,8 +19,32 @@ PhD, Politecnico di Milano.
 
 | | |
 |---|---|
-| [Results/docs/results.md](Results/docs/results.md) | the questions, the results, how to reproduce them — **start here** |
+| [Results/docs/results.md](Results/docs/results.md) | the generator: the questions, the results, how to reproduce them — **start here** |
+| [The classifier part](#the-classifier-part), below | the classifier: what notebooks 05-06 explain, and how |
+| [Results/docs/artefacts.md](Results/docs/artefacts.md) | what `Results/Exp_xAI/` holds, file by file |
 | [Results/docs/setup.md](Results/docs/setup.md) | installation: repository access, Git LFS, conda, CUDA, weights |
+
+## The classifier part
+
+Two ResNet20 with the same architecture and the same initial weights, one trained
+on 40,000 real CIFAR-10 images and one on 40,000 images from the generator
+(`scripts/classifier_part/run_train_real_synth.py`), explained on the real
+CIFAR-10 test set:
+
+- **Case A** — [Notebooks/05_classifier_caseA.ipynb](Notebooks/05_classifier_caseA.ipynb):
+  1,000 images both classify correctly. Do the two models rely on the same
+  evidence? Grad-CAM, Integrated Gradients and LIME maps of the two, compared for
+  agreement (Pearson, top-20% IoU, top-5 superpixel Jaccard) and for faithfulness
+  (deletion and insertion AUC, patch perturbation).
+- **Case B** — [Notebooks/06_classifier_caseB.ipynb](Notebooks/06_classifier_caseB.ipynb):
+  901 images only the real-trained model gets right. What does the synthetic-trained
+  one miss? The true-class evidence the real model uses and the synthetic one does
+  not (Integrated Gradients), and, inside the synthetic model, the evidence for the
+  true class against the evidence for its wrong prediction (Grad-CAM, IG, LIME).
+
+Both notebooks compute once on GPU and reload afterwards: with the delivery
+archive in place they run without a GPU; `FORCE_RECOMPUTE = True` in their
+configuration cell recomputes everything.
 
 ## Layout
 

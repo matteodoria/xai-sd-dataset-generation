@@ -2,7 +2,7 @@
 
 How to get the project running: repository access, Python environment, CUDA and
 pre-trained weights. Follow the steps **in the order given**. What the project
-does, and how it is organised, is in the [README](../README.md).
+does, and how it is organised, is in the [README](../../README.md).
 
 ---
 
@@ -178,7 +178,7 @@ in a cell before the data is loaded:
     import os
     os.environ["ALLOW_CIFAR10_DOWNLOAD"] = "1"
 
-The repository layout is described in the [README](../README.md); the
+The repository layout is described in the [README](../../README.md); the
 explainability work — the questions asked of the model, the results, and how to
 reproduce them — is in [results.md](results.md).
 

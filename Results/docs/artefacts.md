@@ -154,7 +154,8 @@ cannot then be re-scored or re-inspected.
 
 Written and re-read by `python -m scripts.tools.run_classifier_training`, which
 merges into it rather than overwriting: one file per experiment, accumulated
-across runs.
+across runs. **Not in the delivered archive**: it is written only when
+classifiers are retrained.
 
 It is the one artefact outside the `<dataset>/<kind>/` scheme above — it is
 cross-dataset by construction, nested as

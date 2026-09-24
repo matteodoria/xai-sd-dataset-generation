@@ -7,13 +7,15 @@ class-conditional adaptation works; this project asks **why**, from both ends
 of the pipeline:
 
 - **the generator** — how the class condition shapes the image along
-  denoising (notebooks 01-04);
+  denoising (notebooks 01-04) [Matteo D'Oria & Clara Rossi];
 - **the classifier** — how a ResNet20 trained on synthetic CIFAR-10 decides,
   compared with the same network trained on real images, explained with
-  Grad-CAM, Integrated Gradients and LIME (notebooks 05-06).
+  Grad-CAM, Integrated Gradients and LIME (notebooks 05-06) [Gaia Caringi & Alice Flamigni].
 
 Course project for *Interpretability and Explainability in Machine Learning*,
 PhD, Politecnico di Milano.
+
+
 
 ## Documentation
 

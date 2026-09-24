@@ -309,7 +309,7 @@ python -m scripts.generator_part.conditioning.run_attention_stability
 ```
 
 The last two write `Results/Exp_<exp>/<dataset>/attention/uniformity.npz` and
-`stability.npz`, which `notebooks/02_generator_attention.ipynb` reads back without a GPU.
+`stability.npz`, which `Notebooks/02_generator_attention.ipynb` reads back without a GPU.
 
 **Result 3**, the intervention (about an hour per dataset):
 
@@ -348,7 +348,7 @@ logic in `lib/`, one entry point per experiment beside it.
 |---|---|
 | `scripts/generator_part/ugs_analysis/` | the guidance-scale sweep behind notebook 04 |
 | `scripts/tools/` | shared entry points and one-off diagnostics |
-| `notebooks/` | Results 1, 2 and 3, on stored artefacts, without a GPU |
+| `Notebooks/` | Results 1, 2 and 3, on stored artefacts, without a GPU |
 | `Results/Exp_<exp>/` | generated artefacts, git-ignored — see [artefacts.md](artefacts.md) |
 
 Paths in the first table are relative to

@@ -31,3 +31,4 @@ Results/*
 # Diario di lavoro personale, e il suo HTML: restano in locale.
 Results/docs/percorso.md
 Results/docs/percorso.html
+Results/docs/render.py

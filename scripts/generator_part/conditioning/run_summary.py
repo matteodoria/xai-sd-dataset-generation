@@ -7,7 +7,7 @@ second — i.e. whether hours of generation can be spared by a computation that 
 seconds.
 
 Usage:
-    python -m scripts.xai_summary --exp xAI
+    python -m scripts.generator_part.conditioning.run_summary --exp xAI
 """
 
 import argparse

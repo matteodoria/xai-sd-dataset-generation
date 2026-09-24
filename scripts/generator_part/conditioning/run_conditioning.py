@@ -4,7 +4,7 @@ Each run re-validates the closed form it relies on before computing anything.
 Then reports the geometry of the space and stores for it for the notebooks.
 
 Usage:
-    python -m scripts.xai_conditioning --dataset cifar10 --exp xAI --enc_epoch 31
+    python -m scripts.generator_part.conditioning.run_conditioning --dataset cifar10 --exp xAI --enc_epoch 31
 """
 
 import os

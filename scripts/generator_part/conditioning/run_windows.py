@@ -12,7 +12,7 @@ against the distance between the two extremes (always conditioned, never
 conditioned) as the unit.
 
 Usage:
-    python -m scripts.xai_windows --dataset cifar10 --exp xAI --enc_epoch 31 --dif_epoch 10
+    python -m scripts.generator_part.conditioning.run_windows --dataset cifar10 --exp xAI --enc_epoch 31 --dif_epoch 10
 """
 
 import argparse

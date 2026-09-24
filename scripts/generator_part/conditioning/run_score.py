@@ -6,7 +6,7 @@ change; this tells us whether the class survives, which is the question that
 matters and the one the pixel distance answers badly.
 
 Usage:
-    python -m scripts.xai_score --dataset cifar10 --exp xAI --npz steps20_window5.npz
+    python -m scripts.generator_part.conditioning.run_score --dataset cifar10 --exp xAI --npz steps20_window5.npz
 """
 
 import argparse

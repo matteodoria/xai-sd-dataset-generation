@@ -20,11 +20,11 @@ Models/Checkpoints/DDPM/Exp_*/*/DiffusionFt/*.hdf5
 # .gitattributes — senza questa riga entrerebbero in git come blob normali.
 Models/Checkpoints/Classifiers/**/*.h5
 
-# Dataset sintetici generati: si rigenerano con generate_dataset.py.
+# Dataset sintetici generati: si rigenerano con run_generate_dataset.py.
 Data/Synthetic/
 
-# Artefatti dell'analisi xAI (.npz, .png): rigenerabili con gli script xai_*,
-# e .gitattributes manderebbe ogni .npz su LFS.
+# Artefatti dell'analisi xAI (.npz, .png): rigenerabili con gli script run_* e i
+# notebook 05-06, e .gitattributes manderebbe ogni .npz su LFS.
 Results/*
 !Results/docs/
 

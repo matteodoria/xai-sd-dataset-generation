@@ -15,7 +15,7 @@ With ugs = 1.0 the guidance reduces to eps(c), so replacing the conditional
 context is enough — the unconditional one does not reach the output.
 
 Usage:
-    python -m scripts.xai_sanity --dataset cifar10 --exp xAI --enc_epoch 31 --dif_epoch 10
+    python -m scripts.generator_part.conditioning.run_sanity --dataset cifar10 --exp xAI --enc_epoch 31 --dif_epoch 10
 """
 
 import argparse

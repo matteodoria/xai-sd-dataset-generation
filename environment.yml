@@ -100,3 +100,6 @@ dependencies:
       - werkzeug==3.1.8
       - wrapt==2.2.2
       - zipp==4.1.0
+      - opencv-python==4.11.0.86
+      - xplique==1.5.2
+      - lime==0.2.0.1

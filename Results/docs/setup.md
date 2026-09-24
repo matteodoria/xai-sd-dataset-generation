@@ -163,7 +163,15 @@ Available datasets: `cifar10`, `cifar100`, `bloodmnist`, `dermamnist`,
 ## Where to look next
 
 CIFAR-10/100 are downloaded automatically by Keras on first use; there is
-nothing to prepare for them.
+nothing to prepare for them — with one exception. Notebooks 05-06 load the
+CIFAR-10 test set through `scripts/classifier_part/cifar10_utils.py`, which
+never downloads on its own: it reads the Keras cache,
+`~/.keras/datasets/cifar-10-batches-py/`. Any earlier run that loaded CIFAR-10
+through Keras has already filled it. If it is empty, allow the download once,
+in a cell before the data is loaded:
+
+    import os
+    os.environ["ALLOW_CIFAR10_DOWNLOAD"] = "1"
 
 The repository layout is described in the [README](../README.md); the
 explainability work — the questions asked of the model, the results, and how to

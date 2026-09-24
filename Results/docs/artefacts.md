@@ -3,8 +3,9 @@
 What `Results/` contains, who writes each file and who reads it back.
 
 The directory is git-ignored: `.gitattributes` would send every `.npz` to Git LFS, and
-the whole tree is ~688 MB of quantities that the code regenerates. It is delivered
-separately from the repository. Nothing here is a source: every file can be rebuilt
+the whole tree is ~688 MB of quantities that the code regenerates. It is not in the
+repository: it is delivered inside `xAI-Project.zip`, next to the code (see the
+[README](../../README.md#the-delivery-archive)). Nothing here is a source: every file can be rebuilt
 with the commands in [results.md](results.md#how-to-reproduce), or, for
 `cifar10/classifier/`, by running notebooks 05-06 with `FORCE_RECOMPUTE = True`.
 

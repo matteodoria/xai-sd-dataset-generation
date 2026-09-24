@@ -12,6 +12,8 @@ does, and how it is organised, is in the [README](../README.md).
    include files managed by Git LFS (weights and embeddings): you would get
    text placeholders of a few hundred bytes in place of the real files, and the
    code would fail. **Use `git clone` only**, as described below.
+   The `xAI-Project.zip` the project is delivered as is not affected: it was
+   built from a working copy and holds the real files.
 
 2. **Install Git LFS BEFORE cloning.** Cloning without Git LFS active gives you
    the placeholders anyway. The right order is: install git-lfs →
@@ -132,6 +134,9 @@ applied automatically on every `conda activate sd_dataset`.
 The embeddings arrived with the clone, through LFS. What is missing are the
 weights of the fine-tuned diffusion model: they are large (~3.4 GB each) and are
 downloaded separately from the links provided.
+
+With the delivery archive, cifar10's weights are already in place: download
+only the other datasets you need.
 
 ```bash
 # Download only the datasets you need (recommended):

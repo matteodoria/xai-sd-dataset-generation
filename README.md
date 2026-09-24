@@ -61,17 +61,38 @@ in [Results/docs/results.md](Results/docs/results.md#how-to-reproduce).
 
 ## What the repository does not contain
 
-Git-ignored, because large and reproducible:
+Git-ignored, because large. What the notebooks read is shipped with the data
+archive (see below); the rest can be regenerated:
 
 |                                                         | how to get it back |
 |---------------------------------------------------------|---|
 | `Models/Checkpoints/DDPM/**/DiffusionFt/*.hdf5` (~3.4 GB each) | `./download_weights.sh` — links are in the tracked `link.txt` |
-| `Models/Checkpoints/Classifiers/<classifier>/<dataset>/**/*.h5` (~50 MB each) | `python -m scripts.tools.run_classifier_training` |
+| `Models/Checkpoints/Classifiers/<classifier>/<dataset>/**/*.h5` (~50 MB each) | `python -m scripts.tools.run_classifier_training`; `resnet20/cifar10/real/`, the judge notebook 04 scores with, is shipped with the data archive |
 | `Models/Checkpoints/Classifiers/resnet20/resnet20_{real_matched,synthetic}.h5` (3.5 MB each) | shipped with the data archive: retraining gives different models from those notebooks 05-06 were computed from. The recipe is `python -m scripts.classifier_part.run_train_real_synth`, which needs `--overwrite` to replace them and the 40,000 synthetic images in `Data/Synthetic/Exp_xAI/cifar10/40.0kEnc31Dif10Is20Ugs1.0/` |
-| `Data/Synthetic/`                                       | `python -m scripts.tools.run_generate_dataset` |
-| `Results/Exp_*/`                                        | the `run_*.py` entry points, and notebooks 05-06 for `cifar10/classifier/` — contents documented in [Results/docs/artefacts.md](Results/docs/artefacts.md) |
+| `Data/Synthetic/Exp_xAI/cifar10/40.0kEnc31Dif10Is20Ugs1.0/` (40,000 images) | shipped with the data archive: the set the synthetic-trained ResNet20 learned from. `python -m scripts.tools.run_generate_dataset --dataset cifar10 --img_total 40000 --enc_epoch 31 --dif_epoch 10 --inf_steps 20 --ugs 1.0 --exp xAI` generates a new one, not the same images |
+| `Data/Synthetic/Exp_xAI/cifar10/UGS_analysis_Enc31_Dif10_Is20/` | shipped with the data archive: the guidance-scale sweep notebook 04 scores. `python -m scripts.generator_part.ugs_analysis.run_generate_ugs` generates a new one |
+| any other `Data/Synthetic/` set                        | `python -m scripts.tools.run_generate_dataset` |
+| `Results/Exp_*/`                                        | `Exp_xAI` is shipped with the data archive; the `run_*.py` entry points regenerate it, and notebooks 05-06 for `cifar10/classifier/` — contents documented in [Results/docs/artefacts.md](Results/docs/artefacts.md) |
 
 The pre-trained class embeddings and the MedMNIST datasets **are** in the
 repository, through Git LFS. Cloning without `git-lfs` installed leaves text
 pointers in place of the files, and the failure that follows does not look like
 a missing-file error — see [Results/docs/setup.md](Results/docs/setup.md).
+
+## The data archive
+
+`xAI-Project_data.zip` (~1.7 GB) holds every file marked "shipped with the data
+archive" above, each at its path relative to the repository root. Extract it in
+the root of a clone:
+
+```bash
+cd xAI-Project
+unzip /path/to/xAI-Project_data.zip
+```
+
+Every file then lands where the code looks for it, and notebooks 01-06 run on the
+stored artefacts, without a GPU. The one exception is the opening section of
+notebook 04, *Image generation*, which loads the generator: it needs the
+diffusion weights (`./download_weights.sh cifar10`, see
+[Results/docs/setup.md](Results/docs/setup.md)), and the rest of the notebook
+does not depend on it.
